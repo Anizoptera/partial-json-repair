@@ -220,7 +220,8 @@ export async function run() {
   return out;
 }
 `,
-    // A stream never reads input whole: the whole-input route (pre-scan, built-in parser) is parse's.
+    // A stream never reads input whole: the whole-input route (pre-scan, whole reader) is parse's.
+    // `builtin-route` stays: streams build undamaged containers natively with its slice proof.
     absent: [
       "snapshot",
       "snapshot-owned",
@@ -234,7 +235,6 @@ export async function run() {
       "whole-source",
       "whole-input",
       "pre-scan",
-      "builtin-route",
     ],
   },
   {
