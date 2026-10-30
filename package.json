@@ -69,7 +69,7 @@
     "bench:async": "bun bench/async.ts",
     "build": "tsdown",
     "check": "bash scripts/clean-generated.sh --after bun scripts/check.ts",
-    "check:commit": "bash scripts/clean-generated.sh --after bun scripts/check.ts --commit",
+    "check:commit": "bun scripts/check.ts --commit",
     "clean": "bash scripts/clean-generated.sh",
     "corpus:conform": "bun scripts/corpus/verify.ts",
     "corpus:conform:packed": "bun --preload ./scripts/packed-entries.ts scripts/corpus/verify.ts",

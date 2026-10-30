@@ -16,8 +16,6 @@ Requalify after any source change: qualify one unchanged candidate through the f
 Each remote write (publication, push, tag) needs separate maintainer permission for the exact reviewed tree.
 
 - [ ] Configure the npm trusted publisher (`Anizoptera/partial-json-repair`, `release.yml`) for both package names, then revoke the first-publish token; the repository secret is already gone, so the next release fails until this is done.
-- [ ] Commit hooks delete `dist/` on exit while benchmarks or other gates may read it; decide whether only the full `bun run check` cleans generated output.
-
 ## Later work — never release-blocking
 
 Promote an observed contract or ownership failure to section 1, never a timing miss alone. Pause investigations need caller identity, clock brackets and running/runnable/blocked coverage first; no privileged capture is approved.
