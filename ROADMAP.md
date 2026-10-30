@@ -1,21 +1,20 @@
-# TypeScript release plan
+# Roadmap
 
 HLD.md is the sole product authority. Ship TypeScript recovery for damaged or streamed JSON: preserve content, detect conservatively, recover forgivingly, keep equal runtime outcomes and useful typed failure recovery, select final values by default, and collect reports only on request. Calls pay only for requested capabilities; the recovery core has no runtime dependencies.
 Release blockers are only correctness, data, resource release and cancellation failures; slowness, audits and tuning go to Later work. HLD decisions and remote writes stay reserved; never extend an HLD exception to other guarantees or costs; completion starts review, not publication. Current branch only; reasoning lives in source; no persistent scratch. Rust/native/WASM stay deferred.
 
-## 1. Required before release
+## 1. Required before each release
 
-Requalify after any source change: qualify one unchanged candidate through the full packed optimizer/compression matrix, declarations/resolution, both source runners (including the HTTP framework probe on the HLD compatibility runtimes), corpus, complete-only release machinery and cleaned-archive browser/edge coverage. Enumerate declared members; each must complete its behavior, graph or compiler checks. Empty, filtered, skipped or unrelated passing members leave gaps open. Keep the generic-worker exception outside startup only; never rewrite a size reference to clear a failure.
+Requalify after any packaged-source change: qualify one unchanged candidate through the full packed optimizer/compression matrix, declarations/resolution, both source runners (including the HTTP framework probe on the HLD compatibility runtimes), corpus, complete-only release machinery and cleaned-archive browser/edge coverage. Enumerate declared members; each must complete its behavior, graph or compiler checks. Empty, filtered, skipped or unrelated passing members leave gaps open. Keep the generic-worker exception outside startup only; never rewrite a size reference to clear a failure.
 
 ## 2. Maintainer review — only when requested
 
-- [x] Reviewed at `e3a9160` (`release.ts preview v0.1.0`: both archive integrities match their bytes). Redo after any change to packaged source. On explicit review request, prepare source and both cleaned packages against HLD.md and docs/API.md. Identify the committed tree and both package integrity values; old candidates cannot qualify changed source. Check metadata, workflow syntax and action pins with existing owners. Reuse checks only for unchanged subjects and conditions; local results prove no remote CI timing. Map each hunk to a request, delete task scratch and leave clean Git. No outside-repository changes, remote write, publication or provisioning is authorized.
+On explicit review request, prepare source and both cleaned packages against HLD.md and docs/API.md. Identify the committed tree and both package integrity values; old candidates cannot qualify changed source. Check metadata, workflow syntax and action pins with existing owners. Reuse checks only for unchanged subjects and conditions; local results prove no remote CI timing. Map each hunk to a request, delete task scratch and leave clean Git. No outside-repository changes, remote write, publication or provisioning is authorized.
 
 ## 3. Release execution — separate authorization
 
-Each remote write (publication, push, tag) needs separate maintainer permission for the exact reviewed tree.
+Each publication or release tag needs separate maintainer permission for the exact reviewed tree. A pushed `v*` tag runs `release.yml`, which publishes both names through npm trusted publishing (no token); follow `CONTRIBUTING.md` "Releasing".
 
-- [ ] Configure the npm trusted publisher (`Anizoptera/partial-json-repair`, `release.yml`) for both package names, then revoke the first-publish token; the repository secret is already gone, so the next release fails until this is done.
 ## Later work — never release-blocking
 
 Promote an observed contract or ownership failure to section 1, never a timing miss alone. Pause investigations need caller identity, clock brackets and running/runnable/blocked coverage first; no privileged capture is approved.
@@ -36,7 +35,7 @@ Aim for 50–100x on every axis until the measured floor; an unknown floor is a 
 
 Streamed model output is the first caller job, and the streaming table in `docs/PRIOR-ART.md` (2026-10-28, `e608afe`) puts both streaming rivals ahead on every cell. Goal: match or beat the fastest rival on every cell and runtime, with the one-shot oracle still equal, then close in on the clean-bytes floor. A fix that wins one cell and loses another is not done. Damaged replies already hand undamaged members and sibling runs to `JSON.parse` (`src/native-slice.ts`); missing comma now costs ~4.3x the clean parse, mostly whole-text passes before the scanner. Profile of the worst cell's shape (Bun 1.4.4, `snapshot()` 60 times over 815 KB of records, 2026-10-30, `fbfd7ad`; machine under heavy load, so shares only): scanning and building cost ~19x `JSON.parse` at every chunk size; each feed adds ~0.25 µs (generator delivery ~30% of it, owning the caller's chunk with `structuredClone` ~14%). Freezing closed branches (~8%) and owning each string value (~6%; `structuredClone` already beats rebuilding from code units on Bun at every length) are contract costs. No single cost exceeds ~17%, so only a faster scanner closes the gap.
 
-- [ ] Cut per-character cost in `runWindow` and `readString` (each ~17% of self time at 4096-character chunks), measured with `bun bench/ab.ts HEAD` and the streaming table, keeping every contract above. Skipping plain string content in bulk (an ASCII stop table) is rejected: no gain on long strings, which already stream at ~0.5 GB/s, and slower once bounded by the storage budget, so the cost sits in per-token work on short strings.
+- [ ] Cut per-token cost on short tokens: records of short fields stream at ~12x `JSON.parse` (Bun 1.4.4, 4096-character feeds), self time spread over `runWindow` ~18%, `readString` ~13%, `readQuoted` ~12%, `place` ~9%, `structuredClone` ~6%. Start from fixed work done once per token in those frames; judge with `bun bench/ab.ts HEAD` and the streaming table, keeping every contract above. Rejected: skipping plain string content in bulk (ASCII stop table): long strings already stream at ~0.5 GB/s, and bounding the skip by the storage budget made it slower.
 
 ### Consumer size
 
