@@ -55,6 +55,11 @@ interface Step {
    * `typecheck` read `dist/` only when they judge `bench/` files, so other commits skip the build.
    */
   readonly needsFor?: (path: string) => boolean;
+  /**
+   * Starts a worker per core itself, so it holds every slot: one slot under it put twice as many
+   * busy processes as cores, and timed cases passed their timeouts on contention alone.
+   */
+  readonly allCores?: true;
   /** Runs in the complete profile only, so CI can run the CPU-heavy half on its own runner. */
   readonly completeOnly?: true;
   /**
@@ -158,7 +163,7 @@ const ALL_STEPS: readonly Step[] = [
   // second: a prototype-pollution defect can pass every vitest file. JavaScriptCore instead of V8 is
   // a second, smaller benefit. It also compares their test COUNTS — a silent divergence means one of
   // them stopped seeing a file, and a runner that quietly runs fewer tests is a false green.
-  { script: "test:check", ignores: unread, hook: "skip" },
+  { script: "test:check", ignores: unread, hook: "skip", allCores: true },
   // The hook's stand-in: one runtime, and only the test files whose import graph reaches a change.
   // Bun diffs the worktree against HEAD itself, so unstaged edits count too: more tests, never
   // fewer. It follows imports only, so it cannot see a test that READS a changed file
@@ -168,6 +173,7 @@ const ALL_STEPS: readonly Step[] = [
     script: "test:bun",
     ignores: unread,
     hook: "only",
+    allCores: true,
     scope: (paths) => (paths.every((path) => code(path)) ? ["--changed=HEAD"] : []),
   },
   { script: "corpus:conform", ignores: (path) => !contractInput(path) },
@@ -283,19 +289,27 @@ const live = process.stdout.isTTY;
 // a 2-vCPU CI runner it put a dozen processes on two cores, and the test cases running in that
 // burst passed their timeouts on contention alone. A step takes its slot only once its producer
 // settled, so a step that waits never holds one.
-let slots = Math.max(1, navigator.hardwareConcurrency);
-const queue: (() => void)[] = [];
-const acquire = async (): Promise<void> => {
-  if (slots > 0) slots--;
-  else
-    await new Promise<void>((resolve) => {
-      queue.push(resolve);
-    });
+const cores = Math.max(1, navigator.hardwareConcurrency);
+let free = cores;
+// First come, first served: a step needing every slot would otherwise wait forever behind a stream
+// of single-slot steps.
+const queue: { readonly need: number; readonly resolve: () => void }[] = [];
+const acquire = async (need: number): Promise<void> => {
+  if (queue.length === 0 && free >= need) {
+    free -= need;
+    return;
+  }
+  await new Promise<void>((resolve) => {
+    queue.push({ need, resolve });
+  });
 };
-const release = (): void => {
-  const next = queue.shift();
-  if (next === undefined) slots++;
-  else next();
+const release = (held: number): void => {
+  free += held;
+  for (let next = queue[0]; next !== undefined && free >= next.need; next = queue[0]) {
+    queue.shift();
+    free -= next.need;
+    next.resolve();
+  }
 };
 
 const started = Date.now();
@@ -329,18 +343,19 @@ for (const step of STEPS) {
           } as const;
         }
       }
-      await acquire();
+      const held = step.allCores === true ? cores : 1;
+      await acquire(held);
       // A step that reaches its slot after the lane stopped never spawns: started with the aborted
       // signal it would come back `stopped` and be named as still running.
       if (signal.aborted) {
-        release();
+        release(held);
         return { kind: "skipped", script: step.script, because: "the lane stopped first" } as const;
       }
       let run: ScriptRun;
       try {
         run = await runScript(step.script, signal, plan.get(step.script) ?? []);
       } finally {
-        release();
+        release(held);
       }
       if (live) {
         const note = run.kind === "passed" ? "" : `  ${run.kind.toUpperCase()}`;

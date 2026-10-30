@@ -3,7 +3,7 @@
 
 /** Run the shared suite in both supported test runners and reject a silent discovery mismatch. */
 import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { availableParallelism, tmpdir } from "node:os";
 import path from "node:path";
 
 import { LANE_DEADLINE_MS, runScript } from "./run-script";
@@ -84,9 +84,23 @@ const signal = AbortSignal.timeout(LANE_DEADLINE_MS);
 try {
   const vitestReport = path.join(directory, "vitest.xml");
   const bunReport = path.join(directory, "bun.xml");
+  // The runners share the machine: each alone starts a worker per core, so together they put twice
+  // as many busy processes as cores, and on a 4-vCPU CI runner cases that take 0.2 s locally passed
+  // their 5 s timeout on contention alone. Split the cores; `check.ts` gives this step all of them.
+  const cores = availableParallelism();
+  const vitestWorkers = Math.max(1, Math.min(4, Math.floor(cores / 2)));
+  const bunWorkers = Math.max(1, cores - vitestWorkers);
   const [vitest, bun] = await Promise.all([
-    runScript("test", signal, ["--reporter=junit", `--outputFile=${vitestReport}`]),
-    runScript("test:bun", signal, ["--reporter=junit", `--reporter-outfile=${bunReport}`]),
+    runScript("test", signal, [
+      `--maxWorkers=${vitestWorkers}`,
+      "--reporter=junit",
+      `--outputFile=${vitestReport}`,
+    ]),
+    runScript("test:bun", signal, [
+      `--parallel=${bunWorkers}`,
+      "--reporter=junit",
+      `--reporter-outfile=${bunReport}`,
+    ]),
   ]);
 
   // Failure names, skipped cases and discovery counts judge the same report bytes.
