@@ -4,6 +4,7 @@ import type { BuildMode } from "./builder";
 import { ST_KEY } from "./chars";
 import { cutOf } from "./cut";
 import { ownText } from "./lexical-window";
+import { nativeSliceFor } from "./native-slice";
 import { ScalarReader } from "./scalar-reader";
 import type { ScalarRead } from "./scalar-reader";
 import { retainedUnits, scalarUnits } from "./tree";
@@ -81,7 +82,7 @@ export const MODE_STREAM: BuildMode = /* @__PURE__ */ Object.freeze({
   fragments: false,
   streamReader: StreamScalarReader,
   retainedUnits,
-  nativeSlice: undefined,
+  nativeSlice: nativeSliceFor,
   openEdits: undefined,
 });
 

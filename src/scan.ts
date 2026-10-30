@@ -922,9 +922,11 @@ export function createScanner(
         // the root is known to be data, since prose candidacy reads every mark a member holds. Nor
         // once the error budget is spent or a spent budget waits to land: the scan stops after the
         // next token, and a member read whole would make that token the member instead of its
-        // opener (`{"a":1},{"b":2}` under STRICT).
+        // opener (`{"a":1},{"b":2}` under STRICT). Nor under a shared view: it needs every closed
+        // branch frozen, which the scanner does as each container closes and a native tree lacks.
         if (
           native !== undefined &&
+          !build.freezeOnClose &&
           depth > 0 &&
           state === ST_VALUE &&
           candidate.established &&

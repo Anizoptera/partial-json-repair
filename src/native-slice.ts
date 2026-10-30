@@ -14,7 +14,8 @@
  * yields can only be rejected, never misread. `test/pre-scan.test.ts` holds
  * every input to the scanner alone.
  *
- * Reached only through a whole-input `BuildMode`, so stream bundles never ship it.
+ * Reached through `MODE_NATIVE` (whole input) and `MODE_STREAM`; edit, fragment and view-sharing
+ * builds never take it.
  */
 
 import type { ResolvedOptions } from "./options";
@@ -56,7 +57,7 @@ export type NativeSlice = (
 ) => { readonly value: unknown; readonly end: number; readonly run: boolean } | number;
 
 /** The slice reader for these options, or undefined where `JSON.parse` may never answer for them. */
-const nativeSliceFor = (opts: ResolvedOptions): NativeSlice | undefined => {
+export const nativeSliceFor = (opts: ResolvedOptions): NativeSlice | undefined => {
   if (!builtinAllowed(opts)) return undefined;
   /**
    * Array elements that follow one another undamaged are parsed in one call: the scanner's own
