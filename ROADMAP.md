@@ -13,12 +13,10 @@ Requalify after any source change: qualify one unchanged candidate through the f
 
 ## 3. Release execution — separate authorization
 
-Remote execution remains deferred until the maintainer explicitly starts it. Only then request each remote write separately for the exact reviewed tree; local preparation grants no publication, repository creation, push or tag permission.
+Each remote write (publication, push, tag) needs separate maintainer permission for the exact reviewed tree.
 
-- [ ] Create the public repository `Anizoptera/partial-json-repair` with private vulnerability reporting enabled (`SECURITY.md` links its advisory form).
-- [ ] Add a short-lived `NPM_TOKEN` secret for the first publish (see `scripts/release.ts`).
-- [ ] Before releasing `v0.1.0`, obtain the public-history ruling. Review the final source archive; its Git archive header identifies the tree. Recheck `bun scripts/release.ts check v0.1.0` after release-metadata changes. Verify the approved public tree equals the reviewed local tree and contains no `legacy/` path. Follow `CONTRIBUTING.md` "Releasing" and verify both registry packages and their integrity.
-- [ ] Configure the npm trusted publisher for `.github/workflows/release.yml`, delete the secret, revoke the token.
+- [ ] Configure the npm trusted publisher (`Anizoptera/partial-json-repair`, `release.yml`) for both package names, then revoke the first-publish token; the repository secret is already gone, so the next release fails until this is done.
+- [ ] Commit hooks delete `dist/` on exit while benchmarks or other gates may read it; decide whether only the full `bun run check` cleans generated output.
 
 ## Later work — never release-blocking
 
