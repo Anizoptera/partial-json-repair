@@ -1,0 +1,21 @@
+[package]
+name = "partial-json-repair-native"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { version = "3.12.2", default-features = false, features = ["napi8"] }
+napi-derive = "3.6.3"
+partial-json-repair-boundary = { path = "../boundary" }
+
+[build-dependencies]
+napi-build = "2.4.1"
+
+[lints]
+workspace = true

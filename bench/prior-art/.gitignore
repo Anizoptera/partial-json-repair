@@ -1,0 +1,6 @@
+.jsontestsuite
+.jsontestsuite.unversioned/
+node_modules/
+.rival-tests/
+.native-build/
+.bundle-*/

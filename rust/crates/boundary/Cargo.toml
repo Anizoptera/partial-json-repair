@@ -1,0 +1,13 @@
+[package]
+name = "partial-json-repair-boundary"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+partial-json-repair = { path = "../partial-json-repair", features = ["boundary"] }
+
+[lints]
+workspace = true

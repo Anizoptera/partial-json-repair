@@ -1,0 +1,16 @@
+{
+  // The root project as `bun run typecheck` checks it, with no dependency on `dist/`. Tests import
+  // a few `bench/` modules that name the package itself, which `exports` resolves to `dist/*.d.ts`;
+  // here that name resolves to source, so a commit can be type-checked without building first.
+  // `tsconfig.json` cannot carry this: it is the build config, and Bun reads its `paths` at runtime,
+  // so a benchmark would silently measure source instead of the shipped bundle. Those `bench/`
+  // files are still checked against `dist/` by `tsconfig.bench.json`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": {
+      "partial-json-repair": ["./src/index.ts"],
+      "partial-json-repair/async": ["./src/async.ts"]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  // `bench/prior-art/` is checked HERE, not from the root: it is a separate project with its own
+  // `package.json`, lockfile and `node_modules` holding the rival parsers, and TypeScript resolves
+  // packages by walking up from the importing FILE — so a config sitting in this directory finds
+  // them and one sitting at the root reports every rival as missing.
+  //
+  // Checked because nothing else looks at these scripts. They never gate and they are run by hand,
+  // so a type error is the only signal that arrives before a measurement does. MEASURED: a rename
+  // left `rows is not defined` in `compare.ts` and the whole lane went green, because this directory
+  // was named in a comment as "checked from its own directory" and no config had ever been put here.
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["*.ts", "../estimator.ts"]
+}

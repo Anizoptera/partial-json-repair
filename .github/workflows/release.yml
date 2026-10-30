@@ -1,0 +1,110 @@
+name: Release
+
+# A pushed `v<version>` tag publishes that version; `scripts/release.ts` holds the logic and the
+# reasons. Repair a partial failure with "Re-run failed jobs": the publish and finalize jobs reuse
+# this run's reviewed archives, and publication skips what npm already holds after matching bytes.
+# Never "Re-run all jobs": preparation refuses to repack once a package has reached npm.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/check.yml
+
+  prepare:
+    needs: check
+    if: github.repository == 'Anizoptera/partial-json-repair' && github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .tool-versions
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .tool-versions
+          package-manager-cache: false
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version-file: .tool-versions
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bun scripts/release.ts prepare
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-evidence
+          path: release-artifacts/npm-release
+          if-no-files-found: error
+
+  publish:
+    needs: prepare
+    # The full-history private repo carries this workflow too; only the public repo may publish.
+    if: github.repository == 'Anizoptera/partial-json-repair'
+    runs-on: ubuntu-latest
+    # The runner default is six hours, and this job holds a live OIDC identity. Room for two uploads
+    # plus registry-propagation waits (awaitRegistryArchive bounds each at 4 minutes).
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # npm provenance, and trusted publishing once configured
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .tool-versions
+      # npm uploads and signs; its version comes with this Node.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .tool-versions
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: bun install --frozen-lockfile
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-evidence
+          path: release-artifacts/npm-release
+      - run: bun scripts/release-publish.ts
+        env:
+          # Only for the first publish of a new name (see scripts/release.ts); empty afterwards.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  finalize:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .tool-versions
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-evidence
+          path: release-artifacts/npm-release
+      - run: bun scripts/release-finalize.ts
+        env:
+          GH_TOKEN: ${{ github.token }}

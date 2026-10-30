@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "customConditions": ["bun"],
+    "declaration": true,
+    "declarationMap": true,
+    // Public handles must not expose internal state accessors or their scanner/executor types.
+    "stripInternal": true,
+    "exactOptionalPropertyTypes": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noUncheckedIndexedAccess": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    // Corpus and test tooling use ES2023 array-copy helpers; shipped `src` stays on ES2022 APIs.
+    "lib": ["ES2023"],
+
+    // TypeScript 6 defaults to no @types packages, so a leaf config that relied on the old
+    // "every @types package" behaviour silently loses bun:test and node globals. The tests and
+    // the corpus tooling need both; `src` stays runtime-neutral by importing nothing from them,
+    // which `artifact:check` asserts on the BUILT graph rather than on source.
+    "types": ["node", "bun"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "scripts/**/*.ts",
+    "tsdown.config.ts",
+    "vitest*.config.ts"
+  ]
+}

@@ -1,0 +1,170 @@
+{"text":"{\"a\": 1e}","why":"A malformed exponent before a structural delimiter must preserve its spelling rather than silently becoming zero."}
+{"text":"{\"a\": -}","why":"A lone sign where a number is expected must be diagnosed rather than silently becoming zero."}
+{"text":"[-]","why":"A malformed numeric token inside an array must not invent a zero at that position."}
+{"text":"{\"a\": 1e+}","why":"An exponent sign without following digits must not be accepted as a completed number."}
+{"chunks":["{\"a\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\"}"],"why":"Oversized streaming recovery must stop under its configured storage limit, preserve available partial data and report the stop instead of discarding source content."}
+{"chunks":["{\"key\": \"val"],"why":"EOF must deliver an unfinished root and its recovered string prefix even when the last feed stopped exactly at the buffer end."}
+{"chunks":["{\"__proto__\":{\"x\":1},\"safe\":1}"],"why":"Dangerous-key policies must apply to streamed objects without changing their prototype or dropping safe siblings."}
+{"text":"[{\"b\":2]","why":"A mismatched closer must recover the containing structure and report the mismatch rather than falling through a parser state."}
+{"text":"﻿{\"a\":1}","why":"A leading byte-order mark must be removed and reported without changing the recovered value."}
+{"text":"{\"a\": 1_000, \"b\": 2}","why":"A numeric token must be judged with its follower; do not shorten 1_000 to 1 and consume the following member as a suffix."}
+{"text":"{\"a\": 12 34, \"b\": 2}","why":"A stray token before a separator must not consume the following b member as its value."}
+{"text":"{\"name\": \"John\"\n\"age\" 30}","why":"A missing comma and colon still permit member recovery; do not drop the member merely because both separators were inferred."}
+{"text":"{\"a\": True, \"b\": False, \"c\": None}","why":"Foreign literals must recover booleans and null; the string False is truthy and reverses a caller's branch. Each recovery remains independently refuseable."}
+{"text":"[ TRUE, fAlSe, nUlL, NONE, nil ]","why":"Case variants and null aliases change only the complete bare token; repair preserves surrounding whitespace, and every split retains the same values and policy outcomes."}
+{"text":"{True:\"False\",None:\"nil\",a:[Trueish,nilsson,None left]}","why":"Literal recovery must not convert keys, quoted strings, word prefixes or longer unquoted text."}
+{"text":"{\"a\":1,\"a\":2}","why":"Refusing duplicate-key must decline the JSON.parse fast path, so valid JSON syntax cannot bypass the scanner's recovery policy."}
+{"text":"he said \"hello\" today","why":"A quoted scalar inside prose must not count as JSON merely because a quoted string would be a data mark inside a container."}
+{"text":"he said \"{a:1}\" today","why":"candidacy: an opener inside a string the prose QUOTED is not an opener. Separates a scan for the next candidate from a scan for the next brace; the second answers with data the sentence was quoting rather than stating."}
+{"text":"see [1] for the citation","why":"candidacy: a syntactically perfect array in prose with no mark of data. Nothing to report and no confidence to lower -- the text held no value, so this is candidacy rather than a diagnostic."}
+{"text":"\"hello\" today","why":"candidacy: a quoted string AT the trimmed start that does not fill the document. The discriminating case for requiring a CONTAINER before a mark of data counts: a string sets the quoted mark on itself, so without that requirement it accepts itself as evidence. The prose seeds do not catch it -- the next-candidate scan skips quoted runs, so a string later in a sentence is never even read."}
+{"text":"[1] and [2]","why":"candidacy: two containers, neither filling the document and neither carrying a mark of data. Holds the rule that a rejected candidate does not lower the bar for the next one."}
+{"text":"{'__proto__':[1,2,],\"ok\":2}","why":"Dropping a dangerous member must dominate repairs nested inside its span; overlapping text edits must not corrupt the safe sibling."}
+{"text":"﻿{\"a\":1} tail","why":"Removing a leading byte-order mark must not shift the repaired value's end into following prose; spans remain in the original source units."}
+{"text":"/* the answer */ 42","why":"Leading comments are trivia, so a standalone scalar after them must remain detectable."}
+{"text":"/*a*//*b*/42","why":"Adjacent comments split across chunks must not be re-read as a line comment that swallows the following scalar; preserve the distinction at the *//* boundary."}
+{"text":"{\"a\": {'b': 1}, \"c\": 2}","why":"A strict-policy refusal inside content removed by `skip`. The refusal still spends `maxErrors` because it decides how far the scanner examines, while selected-scope diagnostics omit damage in content the caller declined."}
+{"text":"42 /* done */","why":"trailing trivia after a root scalar is not prose. The scalar must remain held while the existing scanner consumes the comment, then be accepted when only trivia reaches the logical end."}
+{"text":"42 // done","why":"a line comment may terminate at end of input without a newline. This separates consuming trailing trivia from requiring another structural token before a held root scalar can be accepted."}
+{"text":"{\"keep\":1,\"a\":[1,2]}","why":"Dropping a nested last member removes its own separator, not the latest comma read inside its value."}
+{"text":"{\"keep\":1,\"nested\":{\"a\":2}}","why":"Dropping a nested first member must not delete the enclosing object's separator."}
+{"text":"[ words ]","why":"Quoting a bare word must preserve surrounding whitespace; scanner consumption and text edit extent are different boundaries."}
+{"text":"[ .50, -.0, +5, +.50E+2, +9007199254740993, .1e-400, +0x20000000000001 ]","why":"Numeric prefixes recover numbers without rounding source digits. Leading plus and leading dot are independently switchable, including their combination and exact-number output."}
+{"text":"[.word,+word,.5x,+5x,+,. ,+. ,+.e2,\".5\",\"+5\"]","why":"Numeric-prefix recovery must preserve invalid whole tokens and quoted strings, never accepting a word's numeric prefix."}
+{"text":"{\"a\":+.5,\"nested\":[+01,+1.,.1e400]}","why":"Combined numeric repairs retain paths, report order and original whitespace while interacting with selection, refusal and exact-number policies."}
+{"text":"{\"a\": \"x\"\\, \"b\"\\: \"z\"}","why":"Escaped delimiters between tokens must retain both members and produce valid repaired JSON; refusing that kind must retain the same partial data."}
+{"text":"{\"a\":\\[1,2\\]\\}","why":"Escaped structural openers and closers use the same token-boundary recovery, including when a chunk ends at the backslash."}
+{"text":"{ /*x*/ :}","why":"Dropping a dangling first member must also remove trivia whose repair is retracted with that member."}
+{"text":"{a:1,b:2 c}","why":"An inferred separator must not reuse the previous member's comma when the next member is dropped."}
+{"text":"{a\\:1\\,b\\:true\\}","why":"Escaped punctuation ends bare keys and scalars exactly where ordinary punctuation does; chunk boundaries must not consume an undecided backslash."}
+{"chunks":["[-Infinity","\\,2]"],"why":"A completed numeric literal still needs its following delimiter; escaped punctuation must not turn negative infinity into text."}
+{"chunks":["[-Infinity","x]"],"why":"A chunk ending at a JavaScript literal must not commit it before the next byte proves whether it is a longer bare string."}
+{"text":"{\u00a0\"a\"\u2000:\u202f\"x\u00a0y\"\u205f,\u3000\"b\":1\ufeff}","why":"Non-JSON token spacing must repair without altering whitespace inside a quoted value; positions retain the input's units."}
+{"text":"{a:foo\u2000bar\u3000,b:true\ufeff,c\u000b:1\u000c}","why":"Trailing bare-token spacing is layout; interior spacing stays content, and non-JSON ASCII spacing still ends numbers and keys."}
+{"text":"\u2000[1]\u3000","why":"Non-JSON spacing must not make a standalone container look like prose or bypass the requested recovery policy."}
+{"text":"\u200042\u3000","why":"A root scalar's trailing spacing must be consumed before its candidacy settles, without requiring another chunk after EOF."}
+{"chunks":["{a:foo\u2000","bar\u3000","// note\n,b:2}"],"why":"Chunked bare-token continuation must distinguish interior whitespace from trailing layout before a comment and report that layout once."}
+{"bytes":"5b2281225d","source":"https://github.com/nst/JSONTestSuite/blob/1ef36fa01286573e846ac449e8683f8833c5b26a/test_parsing/i_string_lone_utf8_continuation_byte.json","license":"MIT; see NOTICE","why":"A lone UTF-8 continuation byte inside a string must reach the decoder unchanged; text encoding cannot generate this input."}
+{"bytes":"5b22eda080225d","source":"https://github.com/nst/JSONTestSuite/blob/1ef36fa01286573e846ac449e8683f8833c5b26a/test_parsing/i_string_UTF8_surrogate_U+D800.json","license":"MIT; see NOTICE","why":"UTF-8 encoding of a surrogate is malformed bytes, unlike a permitted escaped lone surrogate; replacement count and byte positions must stay distinct."}
+{"bytes":"5b22e0ff225d","source":"https://github.com/nst/JSONTestSuite/blob/1ef36fa01286573e846ac449e8683f8833c5b26a/test_parsing/i_string_truncated-utf-8.json","license":"MIT; see NOTICE","why":"An interrupted multibyte sequence followed by an invalid lead byte must not consume the closing quote or merge separate replacement spans."}
+{"bytes":"5b225c75e5225d","source":"https://github.com/nst/JSONTestSuite/blob/1ef36fa01286573e846ac449e8683f8833c5b26a/test_parsing/n_string_invalid-utf-8-in-escape.json","license":"MIT; see NOTICE","why":"Malformed UTF-8 inside an incomplete Unicode escape must compose decoder and string recovery without losing the array boundary."}
+{"bytes":"fffe5b002200e90022005d00","source":"https://github.com/nst/JSONTestSuite/blob/1ef36fa01286573e846ac449e8683f8833c5b26a/test_parsing/i_string_UTF-16LE_with_BOM.json","license":"MIT; see NOTICE","why":"A declared unsupported UTF-16 encoding must return the encoding refusal, not decode its bytes as damaged UTF-8 or salvage embedded ASCII."}
+{"bytes":"7b2281223a317d","why":"Malformed bytes in a key must report the completed replacement key in the path; a spent error budget must not invent that key's value."}
+{"bytes":"5b312c22e0ff225d","why":"Stopping between separate malformed sequences must preserve the previously completed array element without committing the unfinished string."}
+{"bytes":"2f2a812a2f3432","why":"Malformed bytes inside a comment consume the same decoder error budget as bytes in data; discarding trivia must not bypass the limit or lose a later root when budget remains."}
+{"text":"[\"\\ud800\\ud83d\\ude00\",\"\\ud83d\\ude00\\ud800\"]","why":"A lone surrogate forces code-unit storage without changing adjacent valid pairs; canonical values, repaired text and chunked delivery must preserve both representations."}
+{"bytes":"5b666f6f81205d","why":"Malformed bytes in an unquoted value must recover without moving the repair boundary into trailing source whitespace."}
+{"bytes":"7b61813a317d","why":"An unquoted key with malformed bytes must retain its completed name, original byte offsets and independent key-policy refusal."}
+{"bytes":"5b31812c325d","why":"A malformed sequence touching a numeric prefix belongs to the same unquoted token; preserve its replacement character and original byte offsets."}
+{"bytes":"5b666f6f816261722c325d","why":"When a decoder error exhausts the budget inside a bare token, retain its available continuation rather than dropping the token or reading the next value."}
+{"bytes":"5b666f6f816261728162617a2c325d","why":"A second malformed sequence bounds the continuation available after a decoder stop; finishing the whole bare token would read beyond that boundary."}
+{"chunks":["{a:\"ab","","cd\"}"," {a:\"next\"}"],"why":"A short selected string must start once, survive an empty chunk, finish with its closing chunk and release before the next occurrence; combined output alone hides delayed delivery."}
+{"chunks":["{\"a\":1}\n","{b:2}\n","{\"x\":\"😀\"} ","{c:3}"],"why":"Releasing completed roots must preserve later refusal lines and UTF-16 columns, while error positions still identify the original chunk and offset."}
+{"chunks":["{\"z\":0,\"a\":{\"b\":\"par"],"why":"A selected open container must identify its unfinished child string in the cut path; unrelated pending strings must remain outside the selected view."}
+{"text":"[0] {\"kind\":\"skip\"} {kind:\"take\",id:7}","why":"Root filtering must skip earlier candidates and make every whole-input verb use the first object containing all required own keys."}
+{"text":"[0] {\"kind\":\"first\"} {\"kind\":\"second\"}","why":"A failed required-key search must retain the first compatible object rather than an array or a later object."}
+{"chunks":["[0] {\"kind\":\"skip\"} ","{\"id\":7}"],"why":"A stream must defer root acceptance until an object closes and deliver only the matching root."}
+{"chunks":["[0] ","{\"kind\":\"first\"}"],"why":"A stream ending after rejected roots must emit one terminal no-match with the first compatible object."}
+{"text":"```json\n{\"kind\":\"skip\"}\n```\n```json\n{\"id\":7}\n```","why":"Fenced candidates obey the same root filter as plain input; extraction syntax must not bypass own-key acceptance."}
+{"chunks":["123456789"],"why":"An unfinished top-level number must spend maxScalar before end-of-source repair; otherwise a stream can retain an unbounded scalar while the corpus stays green."}
+{"text":"123","stringifyBounds":true,"why":"Encoding must succeed at and above its exact output size and return a typed limit below it in both implementations."}
+{"chunks":[{"bytes":"7b2261223a22c3"},{"bytes":"a9227d"}],"why":"A UTF-8 scalar split inside a multibyte sequence must resume without replacement or delayed delivery."}
+{"chunks":[{"bytes":"7b2261223a22c3"},{"bytes":"a9"},"\"}"],"why":"Switching from bytes to text after a completed multibyte sequence must preserve the decoder state and finish the same value."}
+{"text":"{\"a\":{\"b\":1,\"c\":2}}","why":"Selection and skip must compose by removing the skipped descendant before emitting the selected siblings."}
+{"text":"{\"a\":1,\"b\": tru","why":"A literal the input cut off is no value: the member is dropped and reported, never kept as the string \"tru\"."}
+{"text":"[1, -Inf","why":"A number that turns into a word prefix of -Infinity at the end of input is cut like any unfinished literal."}
+{"text":"[1, 1e+","why":"An exponent with no digits at the end of input is no number; the element is dropped rather than kept as text."}
+{"text":"[1, 12","why":"A finished number at the end of input is a real value and stays, though more digits may have followed."}
+{"text":"[1, tru ","why":"A word the source followed with whitespace was finished by the source, so it is not cut."}
+{"text":"{\"a\":\"x\\u00e9","why":"A string ending in a complete escape at the end of input keeps its member and decoded content."}
+{"text":"{\"a\":\"x\\u00","why":"An incomplete unicode escape at the end of input is excluded from the string, never kept as raw source text."}
+{"text":"[0o17, 0O7, -0o10, 0o1_7]","why":"JavaScript and Python octal literals preserve the values 15, 7, -8 and 15, including the negative literal and the digit separator."}
+{"text":"[1_000, 1.5_5, 1e1_0, 0x1_f, 0b1_0, 9_007_199_254_740_993]","why":"A digit separator in every number part and base is layout: the value is the number without it, exact past 2^53, and confidence is untouched."}
+{"text":"[0_1, 1__0, 0x_1, 1_.5, 1e_1]","why":"Separators JavaScript or Python reject are no number in any grammar, so each run keeps its source text and nothing is split into an invented prefix."}
+{"text":"[1, 2_","why":"A separator at the end of input promises another digit, so the number is unfinished and its member is dropped like any cut number."}
+{"text":"```json\r\n[1]\r\n```","why":"A CRLF fence opener leaves its carriage return before the value; only whitespace separates them, so a markless [1] still fills the fence and is a candidate."}
+{"text":"```json [1]\n```","why":"A value on the fence's own opening line fills the fence just as one on the next line does; a markless root there is a candidate."}
+{"text":"[1] // the list","why":"A comment after a markless root is trivia, not prose; whole input, parseMany and a stream must all find [1], as they do for a root with a mark of data."}
+{"text":"[1]] x","why":"A stray closer after a markless root is stepped over like trivia, but the prose after it still makes the root a word in a sentence, so nothing is found."}
+{"text":"\"abc ","why":"a cut root string owns the whitespace it ends in; that whitespace is content, not space after the root, so the string still fills the document."}
+{"text":"{\"status\": complet","why":"A bare word the end of input touched inside a container is a string still arriving: its item is cut as a string, so a caller does not take the truncated word as final."}
+{"text":"[1, 01","why":"A leading-zero number kept as its text is a string, and touching the end it is cut as one, not labelled a number."}
+{"text":"[1, true","why":"A complete literal touching the end stays final: no continuation extends true, so the cut is between items."}
+{"text":" \"x',\"","why":"A root string whose apostrophe before a delimiter leaves it undecided still begins at its opening quote, so repair drops the leading whitespace on the scanner route as on the built-in one."}
+{"text":" \"abc'","why":"A cut root string ending in an apostrophe waits on that quote, and its span still begins at its opening quote."}
+{"text":"//\n\"x\" {\"a\":1}","why":"A quoted word rejected as prose takes its own marks with it: under STRICT the comment refusal before it still stops the scan at the next candidate, the same verdict whole and per character."}
+{"text":"//\n```\n\"x\" y\n```\n{\"a\":1}","why":"The same through a fence whose quoted content is rejected: the rejected candidate leaves no mark that lands the deferred budget stop early."}
+{"chunks":["{\"a\":\"he","llo"],"why":"A selected string the input ends inside, under fragments: its `end` must say `complete: false`, or a consumer cannot tell it from a closed `\"hello\"`."}
+{"chunks":["{\"a\":\"ok\",\"b\":{\"a\":1","2"],"why":"Fragments of a closed string and of a number the input ends inside: the first `end` is complete, the second is not, because more digits could follow."}
+{"text":"see [[[[\"a\"]]]] here","why":"Prose whose only mark of data, a quoted string, lies past maxDepth under the depth profile: the depth stop leaves it unread, which is no evidence against JSON, so the candidate is found and fails as limit-reached, as it is found without the limit."}
+{"text":"see [[[{a:1}]]] here","why":"The same with a colon inside an object past the depth limit as the only mark."}
+{"text":"see [1,[[[2]]]] here","why":"Two values, one of them past the depth limit: together they are the multiple-values mark."}
+{"text":"see [[[[1]]]] here","why":"Control for the three before: one value past the depth limit is no mark, so this stays prose with or without the limit."}
+{"chunks":["[1, 2","3333","3333","3333"],"why":"A number still being read across chunks is charged to maxRetained like a long string: the buffer released its digits, so maxBuffer no longer sees them."}
+{"chunks":["{\"k\" word"," word"," word"," word"],"why":"A bare word still being read across chunks is charged to maxRetained like a long string: the buffer released its text, so maxBuffer no longer sees it."}
+{"chunks":["{\"a\":\"\ud83d","\ude00\",\"a\":\"\ud83d","\ude00\",\"a\":\"\ud83d","\ude00\",\"kkkkkkkkk"],"why":"A decoder tail held between selected string fragments must be charged before completion refunds it; a later incomplete key must still exceed maxRetained."}
+{"chunks":["{\"a\":\"x","y\",\"a\":\"x","y\",\"a\":\"x","y\",\"kkkkkkkkk"],"why":"Same-size ASCII control for fragment decoder-tail accounting: delivered text leaves no credit against the later retained key."}
+{"chunks":["{\"a\":\"body","',not-a-member"],"why":"An ambiguous quote suffix must stay unpublished until EOF resolves the mismatch, so scalar fragments neither expose rejected text nor duplicate the recovered prefix; retained suffixes obey the storage limit."}
+{"chunks":["{\"a\":\"',","\\u0061","\\u0061","\"}"],"why":"Raw quote-replay source remains buffer carry after compaction; the short decoded prefix keeps maxRetained from masking a maxBuffer bypass."}
+{"chunks":["{\"a\":\"small\"}{\"a\":\"body',xxxxxxxxxxxxxxxxx"],"why":"A selected string stopped after earlier root deliveries keeps its path and string-cut type; later pulls cannot clear the decoder state needed by failed recovery."}
+{"chunks":["{\"a\":\"\\n\\u0061',","tail\"}"],"why":"Both quote interpretations preserve the decoded prefix, so it leaves before settlement while the suffix remains charged and unpublished; a fitting closer later releases that suffix exactly once."}
+{"chunks":["{\"a\":1,\"b\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"],"why":"Retained string capacity binds during decoding of a large chunk, preserving its consumed prefix and stop position without retaining unread source in cut metadata."}
+{"chunks":["{\"a\":1,\"b\":\"","\\n\\u0061\\qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","\",\"c\":2}"],"why":"Selecting a small field recognizes an ignored string without storing its decoded contents; selection does not erase escape policy or original source positions."}
+{"chunks":["{\"a\":1,\"b\":","222222222222222222222222222222222222222222222222"],"why":"An unfinished number stops before banking text beyond retained capacity; its cut and original stop position stay bounded even when the field is unselected."}
+{"chunks":["{\"a\":1,\"b\":","wordwordwordwordwordwordwordwordwordwordwordword"],"why":"An unfinished bare word has the same pre-banking storage bound as a number without publishing its prefix as a recovered value."}
+{"chunks":["{\"a\":1,\"b\":wordwordwordwordwordwordwordwordwordwordwordword}"],"why":"A completed bare string stops before its full value enters retained recovery; only its bounded string prefix is useful after a storage stop."}
+{"chunks":["{\"a\":1,\"b\":222222222222222222222222222222222222222222222222}"],"why":"A completed exact number cannot bypass retained capacity; a bounded missing-token cut preserves evidence without inventing a truncated number."}
+{"chunks":["{\"a\":1,wordwordwordwordwordwordwordwordwordwordwordword:2}"],"why":"A completed bare key stops before installing an oversized or truncated property name; prior fields remain recoverable."}
+{"chunks":["{\"a\":1,\"b\":true             ","x}"],"why":"A bare token can extend a literal-looking prefix after compaction; selection must preserve its syntax and withheld cut text."}
+{"chunks":["{\"a\":1,\"b\":undefined             ","}"],"why":"Trailing layout on an ignored word must preserve its JavaScript-literal recognition and policy across compaction."}
+{"chunks":["{\"a\":1,\"b\":-12345678901234567890.","12345678901234567890e+","123}"],"why":"Selection must preserve numeric syntax and withheld text across fractional and exponent chunk boundaries."}
+{"chunks":["{\"a\":1,\"b\":1.2.3.4.5e+","123}"],"why":"Malformed repeated punctuation must remain invalid under selection after numeric continuation."}
+{"text":"{\"a\":0x1_","why":"A trailing separator leaves a hexadecimal value missing too; the exception for completed hex letter digits must not turn its unfinished source into the number 1."}
+{"text":"{\"a\":1é,\"b\":2漢,\"c\":3😀}","why":"Non-ASCII continuations belong to the numeric-looking word, not to an invented missing member or separate array element."}
+{"text":"{\"id\":1}\n{\"id\":2,\n{\"id\":3}\n{\"id\":4}","why":"A truncated JSONL record must end where the next record opens; reading the opener as a zero-length key invented a \"\" member and swallowed every later record."}
+{"chunks":["{\"id\":2,","\n{\"id\":3}"],"why":"The same interrupted object across a chunk boundary must give the stream the records a whole-input read gives."}
+{"text":"[{\"x\":1,\n{\"x\":2}]","why":"An array element that lost its closing brace must stay a sibling of the next element, not nest it under an invented empty key."}
+{"text":"[1]\n[2]","why":"An input made only of values holds no prose: two markless roots on separate lines are both values, where each used to read as prose beside the other and the whole input answered no-json-found."}
+{"text":"1\n\"x\"\ntrue\n-2","why":"JSONL of scalars must read every line; a scalar root may continue a run only across a line break."}
+{"text":"{\"a\":1}\n[2]","why":"A markless root after a marked one on the next line is still a value; parseMany used to drop it."}
+{"text":"[1],[2]","why":"Values joined by commas are one array the source forgot to bracket (missing-brackets), here two container roots."}
+{"text":"```jsonl\n1\n2\n```","why":"A fenced run of values reads every value, and the closing fence ends the run as the end of input does."}
+{"text":"[0] {\"kind\":\"first\"}","why":"A bracketed label before data on the same line stays prose: only a line break separates two roots, and only a comma touching the first joins them into a list."}
+{"text":"1, 2 and 3","why":"A list led by a value with no mark of data must stand alone like that value, so a sentence listing numbers stays prose."}
+{"chunks":["[1]","[2]\n[3]"],"why":"A held root completed by the next root across a chunk boundary must not re-read the released byte that ended it."}
+{"chunks":["1\n","2"],"why":"A line break seen in an earlier chunk must still separate scalar roots once its bytes leave the buffer."}
+{"text":"1,2,3","why":"A comma-separated run of scalars is one array (missing-brackets), as jsonrepair reads it; reading the first value alone lost the rest silently."}
+{"text":"{\"a\":1},{\"b\":2}","why":"Comma-separated objects, as a model lists records without the enclosing array, are one array with both members."}
+{"text":"/* 1 */\n{\"a\":1},\n/* 2 */\n{\"b\":2}","why":"MongoDB shell output: comments and line breaks may follow the comma inside the recovered list."}
+{"text":"1,2,3,","why":"A trailing comma ends a list as it ends an array: removed and reported, the list still marked unfinished."}
+{"text":"{\"a\":1},","why":"A comma with no value after it leaves a list of one, which is its root again, finished."}
+{"text":"{\"a\":1} ,{\"b\":2}","why":"Only a comma touching the value starts a list, so whitespace after a value settles it at once and a stream never waits past it."}
+{"text":"{\"a\":1},{\"b\":2} and more","why":"Prose after a list led by data ends the list without rejecting it."}
+{"text":"\"ab\",\"cd","why":"A list whose last element the input cut keeps that element, cut, inside the list."}
+{"chunks":["{\"a\":1}",",{\"b\":2}"],"why":"A value ending exactly at a chunk boundary waits for the next character: the comma there makes it the first element of a list, exactly as the whole text reads."}
+{"text":"'tis the season","why":"Prose opening with an apostrophe that never closes holds no JSON evidence: refused under unquoted-root-string with its text recovered, while a closed or nested single-quoted string is still read."}
+{"text":"{\"d\": \"unclosed\n      }","why":"A string whose closing quote is missing swallows the closer on its next line; guessed-string-end ends it at the line break, while the default keeps the text."}
+{"text":"{\"a\": \"x\n, \"b\": \"y\"}","why":"A later quote that does not fit structurally proves the line break ended the string: missing-quote recovers both members instead of a key made of punctuation."}
+{"text":"{\"a\": \"line1\n}, said he\", \"b\": 1}","why":"A later quote that fits structurally proves the line break was content, so guessed-string-end keeps it in the string."}
+{"text":"{\"a\": \"x\nhello world","why":"A line break followed by text, not structure, stays in the string even under guessed-string-end."}
+{"text":"{\"a\": \"x\n \"k\\\"y\": 1}","why":"A quoted key with an escaped quote on the line after a break is structure: missing-quote ends the string at the break."}
+{"text":"{\"d\": \"x\r\n}","why":"A CR LF line break ends the string before its CR: the CR is no part of the recovered text."}
+{"chunks":["{\"d\": \"x\r","\n}"],"why":"A chunk ending on CR holds it until the next unit shows whether CR LF is one break."}
+{"text":"{\"a\": \"x\n  // note\n  \"b\": 1}","why":"A comment line between the break and the next key is trivia, so the key is still structure and the comment stays out of the string."}
+{"chunks":["{\"a\": \"x\n  \"k","\": 1, \"b\": \"y\n more\"}"],"why":"A line break whose next line has not finished showing a key is held unread across the chunk; the second string's break is followed by text, so it stays in that string."}
+{"text":"{\"msg\": \"see\n\"quoted\": words\"}","why":"A quoted key after a break, then a quote that would close it: by default missing-quote keeps both members, where the literal reading invented quoted = \": words\" and called the value complete."}
+{"chunks":["[\"a\n,"," \"b\"]"],"why":"A comma ending a chunk after a break waits for the next unit: a quote of the string's own kind after it is missing-quote evidence, anything else only guessed-string-end's."}
+{"text":"[{\"n\":\"a},{\"n\":\"b\"},{\"n\":\"c, \"k\": 1}]","why":"A missing closing quote on one line: the literal reading closed each string at the next key's quote and invented members such as b = \"},{\" with ok true. Closers, a comma and a quoted key with its colon end the string before them (missing-quote)."}
+{"chunks":["{\"a\": \"x,"," \"b","\": 1}"],"why":"A comma inside a string that a chunk ends after, and a key split across chunks: the stream holds the comma unread until the key's colon shows it ended the string."}
+{"text":"{\"g\": \"digraph {\n  a -> b\n}","why":"A graph value cut before its closing quote keeps its last line by default: the string opened the brace that line closes, so the brace is text, not structure."}
+{"text":"{\"a\": \"x\n \"k\": \"y\n b : 2\n}","why":"A bare-word key spaced from its colon after an earlier break's quoted key is no quote evidence: the probe must not keep the earlier key's quote."}
+{"chunks":["{\"a\": {\"d\": \"x {y}","\n }","\n}"],"why":"A truncated record whose string closed every bracket it opened ends at the break before the closers the input ends with, and waits across chunks until the input ends."}
+{"chunks":["{\"code\": \"f([1]) {","\n  return 1;\n","}"],"why":"Cut code keeps its closing line: the open count of the string's own brackets survives chunk boundaries and release of its delivered text."}
+{"chunks":["[\"x\", \"cut\n]","more\"]"],"why":"Text arriving after closers makes them the string's own line again: a stream must not settle the break until the input ends or the line goes on."}
+{"text":"{\"a\"::1,\"b\":2}","why":"A doubled colon must be removed as a separator, keeping the number, not read as the invented string \":1\" at near-full confidence."}
+{"text":"[1,:2]","why":"A colon where an array element begins is no value; the element after it must keep its number."}
+{"chunks":["{\"x\":",":\"b\"}"],"why":"A doubled colon split between chunks must give the whole-input answer, keeping the member value \"b\"."}
+{"text":"{\"a\": \"x\n/y\n \"b\": 1}","why":"A slash after a line break that opens no comment is text, so the unclosed string keeps that line before the next quoted key."}
+{"text":"{\"a\": \"x\n/* a **b */ \"b\": 1}","why":"A block comment holding a star not followed by a slash stays a comment while the line probe decides where an unclosed string ends."}
+{"text":"[\"x\\q', \"y\"]","why":"A string closed by the other quote kind must report its invalid escape beside the quote mismatch, or refuse it when that repair is off."}
+{"chunks":["\"a\\q\\q\\q\\q\""],"why":"An unknown escape reaching the retained-storage bound with one unit of room stops before it, never keeping half of the escape's two source units."}

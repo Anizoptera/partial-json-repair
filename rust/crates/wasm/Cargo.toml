@@ -1,0 +1,20 @@
+[package]
+name = "partial-json-repair-wasm"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+partial-json-repair-boundary = { path = "../boundary" }
+spin = { version = "0.12.3", default-features = false, features = ["mutex", "spin_mutex"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+dlmalloc = { version = "0.2.14", features = ["global"] }
+
+[lints]
+workspace = true

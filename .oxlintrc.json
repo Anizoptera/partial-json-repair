@@ -1,0 +1,141 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "promise", "node"],
+  "options": { "typeAware": true },
+  // Type-aware `no-unsafe-*` rules reject unsafe values arriving from untyped imports;
+  // `no-explicit-any` rejects only annotations written in this project.
+  //
+  // `style` and `restriction` are NOT enabled, on evidence rather than taste. `-D style` reports
+  // `import/no-named-export` 130 times in `src/` alone -- an instruction to delete this package's
+  // public API -- while also reporting `import/prefer-default-export`, so it holds both sides of that
+  // argument at once. `restriction` is defined by oxlint as lints that "prevent the use of language
+  // and library features", a per-project ban menu; on this tree it bans `async`/`await`, optional
+  // chaining and bitwise operators, all of which `src/` uses. Neither is adoptable whole, and taking
+  // rules out of them by preference is how a rule set stops having reasons.
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "perf": "error"
+  },
+  "rules": {
+    // Fights `noUncheckedIndexedAccess`: every indexed read followed by a narrowing assertion is
+    // reported as unsafe, when it is the pattern that setting demands. The scanner indexes
+    // constantly, so leaving this on would mean an assertion suppressed at every hot line.
+    "typescript/no-unsafe-type-assertion": "off",
+
+    // Empty defaults describe omitted options; Exact<O, Allowed> still checks supplied options.
+    // Replacing them with the full options type widens option-dependent return types.
+    "typescript/no-generated-empty-object-type": "off",
+
+    // Keep single-use arrow helpers beside their callers; lifting them is not a measured speedup.
+    // Function declarations still receive the scope check.
+    "unicorn/consistent-function-scoping": ["error", { "checkArrowFunctions": false }],
+
+    // These two are `restriction`-category, so enabling the categories above does NOT enable them.
+    // Keep the type-safety bans explicit so category defaults cannot silently disable them.
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+
+    "eslint/no-underscore-dangle": "error",
+
+    // Scope disposal consumes using bindings without an explicit value read. An options object
+    // clears Oxlint's default underscore exemptions, so preserve those explicitly.
+    "eslint/no-unused-vars": [
+      "error",
+      { "ignoreUsingDeclarations": true, "varsIgnorePattern": "^_", "argsIgnorePattern": "^_.+" }
+    ],
+
+    // Everything below is a `pedantic` rule switched OFF. Each names the measurement or the ruling
+    // that took it off; a rule with no reason beside it does not belong in this list.
+    //
+    // Some are off for their AUTOFIX rather than their report, and each says so. `.githooks/pre-commit`
+    // runs `lint:fix` and stages the result silently, so a bad fix reaches a commit nobody reads.
+    // oxlint cannot keep a rule's report while refusing its fix -- `--fix` applies whatever the
+    // enabled rules offer -- so a rule whose fix cannot be trusted has to go entirely.
+
+    // Its fix rewrites `reduce(fn, undefined)` to `reduce(fn)`, which throws on an empty array
+    // ("reduce of empty array with no initial value"). Measured on this tree: the fix landed in
+    // `scripts/pre-commit.ts` and `typecheck` caught it as TS2554. A fix that needs the type checker
+    // to catch it is not a safe fix.
+    "unicorn/no-useless-undefined": "off",
+
+    // Off for READABILITY, not speed. Every site it fires on is `this.stack[this.stack.length - 1]`,
+    // rewritten to `this.stack.at(-1)`. It cannot fire on the `this.keys[this.stack.length - 1]` one
+    // line below each, because that indexes a DIFFERENT array by `stack`'s length -- the parallel
+    // arrays `builder.ts` is built on. The fix would leave two spellings of "the top frame" adjacent
+    // and delete the one showing they move together.
+    //
+    // Do not reopen this as a perf question. A "1.8-2.0x regression" was measured once and did not
+    // reproduce: the benchmark's stack never changed, so it timed loop hoisting. And `scan.ts` spells
+    // its typed depth stack `stack[top - 1]`, which this rule never matches, so no hot path is at
+    // stake either way.
+    "unicorn/prefer-at": "off",
+
+    // Wants `codePointAt` over `charCodeAt`. `bench/primitives.bench.ts` measured `charCodeAt` as the
+    // scanner's choice and `src/scan.ts` documents it; the scanner works in code UNITS on purpose.
+    // No autofix, so this one is pure noise -- 58 reports in `src/` against a recorded measurement.
+    "unicorn/prefer-code-point": "off",
+
+    // No autofix and 233 reports, 52 in `src/`. It asks for deeply readonly parameters on the
+    // builder's tree and the scanner's stack, which those functions exist to mutate. Readonly is used
+    // deliberately elsewhere in this package; applying it here would mean asserting it away again.
+    "typescript/prefer-readonly-parameter-types": "off",
+
+    // Size limits with defaults far tighter than the thresholds this project actually works to, so
+    // they fire constantly on code nobody intends to change. A tripwire that is always tripped stops
+    // being read, and these would be the loudest thing in the lane.
+    "eslint/max-lines-per-function": "off",
+    "eslint/max-lines": "off",
+    "eslint/max-depth": "off",
+    "import/max-dependencies": "off",
+
+    // Inline annotation is this codebase's documented comment style -- the reasoning sits beside the
+    // line it explains, which is the whole convention described in AGENTS.md.
+    "eslint/no-inline-comments": "off",
+
+    // Cannot tell a promise chain from an IIFE that is left unawaited ON PURPOSE. `scripts/check.ts`
+    // starts every gate step with `(async () => ...)()` and collects the promises, which is what
+    // makes the lane concurrent; doing what this rule asks would run the steps one after another and
+    // roughly double the commit. A rule that advises a serial rewrite of the parallel path is worse
+    // than absent here.
+    "unicorn/prefer-top-level-await": "off"
+  },
+  "overrides": [
+    {
+      // Type-aware rules are off here because oxlint has NO TYPES for these files, so its verdicts
+      // are about its own resolution rather than the code. It reports `process.versions` in
+      // `bench/harness.ts` as an "`error` typed value" -- `error` is TypeScript's marker for a type
+      // it could not resolve -- while the identical expression in `src/` resolves fine.
+      //
+      // The cause is that oxlint discovers a tsconfig per file by its standard name, and `bench/` is
+      // not in the root `tsconfig.json`'s include set. It is checked by `tsconfig.bench.json`, which
+      // oxlint cannot find, and `bench/prior-art/` is a separate project with its own lockfile.
+      // `bun run typecheck` still covers all of it -- this only stops the linter guessing.
+      //
+      // Renaming that config so oxlint finds it would turn these rules back on. Not worth it today:
+      // benchmarks never gate, so the rules would buy coverage only where a wrong answer costs a
+      // measurement rather than a shipped defect.
+      "files": ["bench/**"],
+      "rules": {
+        "typescript/no-unsafe-call": "off",
+        "typescript/no-unsafe-member-access": "off",
+        "typescript/no-unsafe-argument": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/no-unsafe-return": "off",
+        "typescript/strict-boolean-expressions": "off"
+      }
+    },
+    {
+      // A test double implementing `AsyncIterator` must be `async` to satisfy the interface, even
+      // when its body has nothing to await. Every report of this rule in the repo is that shape.
+      "files": ["test/**"],
+      "rules": {
+        "eslint/require-await": "off",
+        "typescript/require-await": "off"
+      }
+    }
+  ],
+  // API snapshots record compiler output; lint fixes would silently rewrite the contract evidence.
+  "ignorePatterns": ["rust/js-adapters", "api/**"]
+}

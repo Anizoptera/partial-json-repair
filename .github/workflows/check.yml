@@ -1,0 +1,58 @@
+name: Check
+
+# This workflow carries NO logic of its own: it installs and runs the same `bun run check` a
+# developer runs, split into the two profiles that partition it (`--commit`, `--complete-only`).
+# A step that exists only here cannot be run before it fails, so the local lane and this one would
+# drift with nothing to reveal it. CI is automation, never the gate.
+on:
+  # `release.yml` calls this so a tag publishes only after the complete gate passed on that commit.
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # One job per profile: a 2-vCPU runner cannot hold the bundlers and the timed test cases at once
+    # without starving the tests past their timeouts (see the profiles in `scripts/check.ts`).
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [--commit, --complete-only]
+    runs-on: ubuntu-latest
+    # The lane stops itself at `LANE_DEADLINE_MS` (`scripts/run-script.ts`); this cap also bounds
+    # setup and installs, where the default of six hours would let a hang burn a runner all day.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # `.tool-versions` is the single toolchain declaration, read by asdf locally and by every setup
+      # action here, so a developer's shell runs what this runs.
+      #
+      # Node is not incidental to a Bun project: every gate tool -- oxfmt, oxlint, vitest -- is a
+      # `#!/usr/bin/env node` shim. Without this step the lane still passed, on whatever Node the
+      # runner happened to ship, which is exactly the local-vs-CI drift the comment above claims
+      # cannot happen. Locally the same gap is loud: an absent pinned Node exits 126 at the first
+      # tool.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .tool-versions
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .tool-versions
+      # Deno is a supported runtime: `artifact:check` runs the packed package under it and fails without it.
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version-file: .tool-versions
+      - run: bun install --frozen-lockfile
+      - run: bun run check "$PROFILE"
+        env:
+          PROFILE: ${{ matrix.profile }}

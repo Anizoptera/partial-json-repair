@@ -1,0 +1,102 @@
+{
+  "machine": {
+    "arch": "arm64",
+    "logicalCpus": 16,
+    "loadAverages": "6.27 5.91 5.91",
+    "platform": "darwin"
+  },
+  "routes": {
+    "bun 1.4.2": {
+      "bun-ffi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 59,
+        "startupMs": "1.6"
+      },
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 90,
+        "startupMs": "1.6"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 105,
+        "startupMs": "10"
+      }
+    },
+    "bun 1.3.14": {
+      "bun-ffi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 104,
+        "startupMs": "6.3"
+      },
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 134,
+        "startupMs": "1.6"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 170,
+        "startupMs": "16"
+      }
+    },
+    "node 22.23.2": {
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 125,
+        "startupMs": "1.6"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 103,
+        "startupMs": "1.0"
+      }
+    },
+    "node 24.21.0": {
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 168,
+        "startupMs": "1.6"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 142,
+        "startupMs": "1.0"
+      }
+    },
+    "node 26.8.2": {
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 178,
+        "startupMs": "1.6"
+      },
+      "node-ffi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 149,
+        "startupMs": "2.5"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 153,
+        "startupMs": "1.0"
+      }
+    },
+    "deno 2.9.6": {
+      "deno-ffi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 136,
+        "startupMs": "2.5"
+      },
+      "napi": {
+        "artifactBytes": 1437776,
+        "peakMiB": 136,
+        "startupMs": "2.5"
+      },
+      "wasm": {
+        "artifactBytes": 646967,
+        "peakMiB": 145,
+        "startupMs": "1.0"
+      }
+    }
+  }
+}

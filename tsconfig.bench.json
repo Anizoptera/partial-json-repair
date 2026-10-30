@@ -1,0 +1,23 @@
+{
+  // `bench/**` is type-checked, but it cannot join `tsconfig.json`'s include set: the benchmarks
+  // import `./harness.ts` WITH the extension so Node can resolve them, and that needs
+  // `allowImportingTsExtensions`, which TypeScript permits only when nothing is emitted. The base
+  // config is also the build config, so setting it there is an error rather than a preference.
+  //
+  // Checked because nothing else looks at them: benchmarks never gate, so a type error is the only
+  // signal that arrives without running them. `stream.bench.ts` had gone on calling a `feed()`/
+  // `end()` shape that no longer existed.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  // Top level only. `bench/prior-art/` is a separate project with its own `package.json`, lockfile
+  // and `node_modules` holding the rival parsers; TypeScript resolves packages by walking up from
+  // the importing FILE, so that directory has its OWN config sitting beside those dependencies —
+  // `bench/prior-art/tsconfig.json`, which `typecheck` runs. It is not optional: while this comment
+  // said only that the directory was "checked from its own directory" and no such config existed,
+  // nothing checked it at all, and a rename left an undefined identifier in `compare.ts` that the
+  // whole lane passed green.
+  "include": ["bench/*.ts"]
+}

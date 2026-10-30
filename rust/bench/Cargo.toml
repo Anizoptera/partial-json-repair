@@ -1,0 +1,28 @@
+# Measures this crate's scalar scanner against the fastest Rust JSON parsers, to decide whether any
+# of them belongs in the architecture. Its own workspace root inherits the repository toolchain pin
+# (the measurement must price the code, not whichever toolchain the machine resolved) while staying
+# outside the product workspace, where it would otherwise join the commit gate. Benchmarks never gate.
+[workspace]
+
+[package]
+name = "rust-prior-art"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+jiter = "0.16.0"
+partial-json-repair = { path = "../crates/partial-json-repair" }
+serde_json = "1.0.151"
+serde_json5 = "0.2.1"
+simd-json = "0.18.1"
+sonic-rs = "0.5.8"
+struson = { version = "0.7.2", features = ["serde", "simple-api"] }
+tinyjson = "2.5.1"
+
+[profile.release]
+# The shipping profile, deliberately: a rival measured under settings a consumer would not install
+# reports our build options rather than its code.
+opt-level = 3
+lto = "thin"
+codegen-units = 1

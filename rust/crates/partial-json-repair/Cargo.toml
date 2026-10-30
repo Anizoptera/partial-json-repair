@@ -1,0 +1,40 @@
+[package]
+name = "partial-json-repair"
+version = "0.1.0"
+description = "Recover usable data from JSON that is damaged, cut off, or buried in other text."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# `std` is additive and off by default: the core is `no_std` plus `alloc` because the bottom WASM
+# rung cannot be built any other way, and retrofitting `no_std` later is a rewrite.
+default = []
+std = []
+# Internal continuation access for the native and WebAssembly transport crates.
+boundary = []
+# Application-type conversion, ruled optional by `HLD.md`: the recovery core has no required
+# third-party dependency, and enabling this changes nothing about what recovery returns.
+serde = ["dep:serde"]
+# Standard async-stream integration, ruled optional by `HLD.md` alongside Serde. It brings the
+# `Stream` TRAIT and no executor: choosing one here would pick the caller's runtime for them.
+async = ["dep:futures-core"]
+
+[dependencies]
+# The trait only — `futures-core` is the definition every executor agrees on, with no runtime of its
+# own. `core::async_iter::AsyncIterator` would need no dependency at all and is the right answer the
+# day it stabilises; it is nightly-only, so it is not an option yet.
+futures-core = { version = "0.3.31", default-features = false, optional = true }
+# `alloc` only. Pulling serde's `std` here would drag `std` into a core that the bottom WASM rung
+# cannot build with it.
+serde = { version = "1.0.229", default-features = false, features = ["alloc"], optional = true }
+
+[dev-dependencies]
+# An integration test links the library but NOT the library's dependencies, so the async tests need
+# their own line to name the `Stream` trait they implement.
+futures-core = { version = "0.3.31", default-features = false }
+# `derive` so the tests convert into ordinary application structs, which is the whole claim.
+serde = { version = "1.0.229", default-features = false, features = ["alloc", "derive"] }

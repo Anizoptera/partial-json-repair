@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  // Prose is never wrapped to a column: the line breaks are the author's. Reaches YAML only now —
+  // oxfmt applies it to Markdown, MDX and YAML, and Markdown is off (below). Stated rather than
+  // inherited: it is oxfmt's current default, and a default is not a promise. `printWidth` still
+  // governs code, and it OVERRIDES `.editorconfig.max_line_length` rather than reading it, so a
+  // width set there would not reach prose even if this were dropped.
+  "proseWrap": "preserve",
+  // Markdown is not formatted. Maintainer's ruling; do not re-enable without one.
+  //
+  // Facts for whoever revisits it. oxfmt has no Markdown formatter: it tags Markdown
+  // `FileKind::Prettier` and hands it to a bundled Prettier, which pads every table cell to the
+  // widest in its column. Nothing switches that off — not in oxfmt, not in Prettier — and it
+  // ignores `printWidth` (measured: width 25, table still 40 wide). Only `<!-- prettier-ignore -->`
+  // above a single table suppresses it. Turning Markdown off also drops list markers, `__bold__`
+  // to `**bold**`, blockquote and heading spacing, and hard breaks. Nothing else checks Markdown.
+  //
+  // The list is not guessed: `prettier --support-info` reports the Markdown and MDX languages, and
+  // oxfmt was probed with one file per candidate extension. Both claim the same 14 names, identical
+  // across oxfmt 0.28 through 0.66. Two are bare FILENAMES, which an extension list misses. `.mdc`
+  // is claimed by neither. `.txt`, `.log`, `.rst`, `.adoc`, `.org` and `.tex` need no entry:
+  // oxfmt has no parser for them.
+  "ignorePatterns": [
+    "**/*.{md,livemd,markdown,mdown,mdwn,mdx,mkd,mkdn,mkdown,ronn,scd,workbook}",
+    "**/README",
+    "**/contents.lr"
+  ]
+}

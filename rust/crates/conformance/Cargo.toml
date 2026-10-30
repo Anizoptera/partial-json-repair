@@ -1,0 +1,19 @@
+# The Rust PRODUCER for the recorded contract (`scripts/corpus/record.ts`). Not a second harness: what is observed is defined
+# once, on the TypeScript side, and this reproduces it — see `corpus/AGENTS.md`.
+[package]
+name = "conformance"
+version = "0.0.0"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+# Without this stanza a member inherits NONE of the workspace lint policy, which is the quiet way a
+# lint gate ends up covering one crate out of two.
+[lints]
+workspace = true
+
+[dependencies]
+# `std` is on here and off in the core: this reads a file and prints a report, which is exactly the
+# per-variant wrapper work the core stays `no_std` in order to keep out of.
+partial-json-repair = { path = "../partial-json-repair" }

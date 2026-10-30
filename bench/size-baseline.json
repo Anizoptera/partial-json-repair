@@ -1,0 +1,1866 @@
+{
+  "tools": {
+    "vite": "8.3.5",
+    "webpack": "5.112.2",
+    "rspack": "2.2.9",
+    "esbuild": "0.28.2",
+    "rolldown": "1.2.15",
+    "bun": "1.4.4"
+  },
+  "compression": {
+    "gzip": 9,
+    "brotli": 11,
+    "zstd": 19
+  },
+  "tarball": 609101,
+  "rows": {
+    "configured-parse × vite": {
+      "initial": {
+        "raw": 104317,
+        "gzip": 32187,
+        "brotli": 28781,
+        "zstd": 30124
+      },
+      "total": {
+        "raw": 104317,
+        "gzip": 32187,
+        "brotli": 28781,
+        "zstd": 30124
+      }
+    },
+    "configured-parse × webpack": {
+      "initial": {
+        "raw": 106087,
+        "gzip": 32004,
+        "brotli": 28492,
+        "zstd": 29842
+      },
+      "total": {
+        "raw": 106087,
+        "gzip": 32004,
+        "brotli": 28492,
+        "zstd": 29842
+      }
+    },
+    "configured-parse × rspack": {
+      "initial": {
+        "raw": 103651,
+        "gzip": 31706,
+        "brotli": 28264,
+        "zstd": 29577
+      },
+      "total": {
+        "raw": 103651,
+        "gzip": 31706,
+        "brotli": 28264,
+        "zstd": 29577
+      }
+    },
+    "configured-parse × esbuild": {
+      "initial": {
+        "raw": 105111,
+        "gzip": 32987,
+        "brotli": 29417,
+        "zstd": 30895
+      },
+      "total": {
+        "raw": 105111,
+        "gzip": 32987,
+        "brotli": 29417,
+        "zstd": 30895
+      }
+    },
+    "configured-parse × rolldown": {
+      "initial": {
+        "raw": 104437,
+        "gzip": 31761,
+        "brotli": 28396,
+        "zstd": 29714
+      },
+      "total": {
+        "raw": 104437,
+        "gzip": 31761,
+        "brotli": 28396,
+        "zstd": 29714
+      }
+    },
+    "configured-parse × bun": {
+      "initial": {
+        "raw": 106975,
+        "gzip": 33020,
+        "brotli": 29510,
+        "zstd": 30857
+      },
+      "total": {
+        "raw": 106975,
+        "gzip": 33020,
+        "brotli": 29510,
+        "zstd": 30857
+      }
+    },
+    "parse × vite": {
+      "initial": {
+        "raw": 104213,
+        "gzip": 32147,
+        "brotli": 28758,
+        "zstd": 30082
+      },
+      "total": {
+        "raw": 104213,
+        "gzip": 32147,
+        "brotli": 28758,
+        "zstd": 30082
+      }
+    },
+    "parse × webpack": {
+      "initial": {
+        "raw": 105976,
+        "gzip": 31963,
+        "brotli": 28468,
+        "zstd": 29803
+      },
+      "total": {
+        "raw": 105976,
+        "gzip": 31963,
+        "brotli": 28468,
+        "zstd": 29803
+      }
+    },
+    "parse × rspack": {
+      "initial": {
+        "raw": 103567,
+        "gzip": 31677,
+        "brotli": 28270,
+        "zstd": 29549
+      },
+      "total": {
+        "raw": 103567,
+        "gzip": 31677,
+        "brotli": 28270,
+        "zstd": 29549
+      }
+    },
+    "parse × esbuild": {
+      "initial": {
+        "raw": 105005,
+        "gzip": 32952,
+        "brotli": 29475,
+        "zstd": 30864
+      },
+      "total": {
+        "raw": 105005,
+        "gzip": 32952,
+        "brotli": 29475,
+        "zstd": 30864
+      }
+    },
+    "parse × rolldown": {
+      "initial": {
+        "raw": 104319,
+        "gzip": 31722,
+        "brotli": 28393,
+        "zstd": 29679
+      },
+      "total": {
+        "raw": 104319,
+        "gzip": 31722,
+        "brotli": 28393,
+        "zstd": 29679
+      }
+    },
+    "parse × bun": {
+      "initial": {
+        "raw": 106867,
+        "gzip": 32978,
+        "brotli": 29433,
+        "zstd": 30828
+      },
+      "total": {
+        "raw": 106867,
+        "gzip": 32978,
+        "brotli": 29433,
+        "zstd": 30828
+      }
+    },
+    "parse-many × vite": {
+      "initial": {
+        "raw": 97195,
+        "gzip": 29676,
+        "brotli": 26483,
+        "zstd": 27745
+      },
+      "total": {
+        "raw": 97195,
+        "gzip": 29676,
+        "brotli": 26483,
+        "zstd": 27745
+      }
+    },
+    "parse-many × webpack": {
+      "initial": {
+        "raw": 98891,
+        "gzip": 29649,
+        "brotli": 26325,
+        "zstd": 27671
+      },
+      "total": {
+        "raw": 98891,
+        "gzip": 29649,
+        "brotli": 26325,
+        "zstd": 27671
+      }
+    },
+    "parse-many × rspack": {
+      "initial": {
+        "raw": 96847,
+        "gzip": 29393,
+        "brotli": 26284,
+        "zstd": 27525
+      },
+      "total": {
+        "raw": 96847,
+        "gzip": 29393,
+        "brotli": 26284,
+        "zstd": 27525
+      }
+    },
+    "parse-many × esbuild": {
+      "initial": {
+        "raw": 97967,
+        "gzip": 30410,
+        "brotli": 27143,
+        "zstd": 28467
+      },
+      "total": {
+        "raw": 97967,
+        "gzip": 30410,
+        "brotli": 27143,
+        "zstd": 28467
+      }
+    },
+    "parse-many × rolldown": {
+      "initial": {
+        "raw": 97473,
+        "gzip": 29466,
+        "brotli": 26296,
+        "zstd": 27558
+      },
+      "total": {
+        "raw": 97473,
+        "gzip": 29466,
+        "brotli": 26296,
+        "zstd": 27558
+      }
+    },
+    "parse-many × bun": {
+      "initial": {
+        "raw": 99676,
+        "gzip": 30453,
+        "brotli": 27128,
+        "zstd": 28429
+      },
+      "total": {
+        "raw": 99676,
+        "gzip": 30453,
+        "brotli": 27128,
+        "zstd": 28429
+      }
+    },
+    "repair × vite": {
+      "initial": {
+        "raw": 102376,
+        "gzip": 31430,
+        "brotli": 27929,
+        "zstd": 29319
+      },
+      "total": {
+        "raw": 102376,
+        "gzip": 31430,
+        "brotli": 27929,
+        "zstd": 29319
+      }
+    },
+    "repair × webpack": {
+      "initial": {
+        "raw": 104242,
+        "gzip": 31474,
+        "brotli": 27889,
+        "zstd": 29217
+      },
+      "total": {
+        "raw": 104242,
+        "gzip": 31474,
+        "brotli": 27889,
+        "zstd": 29217
+      }
+    },
+    "repair × rspack": {
+      "initial": {
+        "raw": 101939,
+        "gzip": 31256,
+        "brotli": 27748,
+        "zstd": 29062
+      },
+      "total": {
+        "raw": 101939,
+        "gzip": 31256,
+        "brotli": 27748,
+        "zstd": 29062
+      }
+    },
+    "repair × esbuild": {
+      "initial": {
+        "raw": 103224,
+        "gzip": 32160,
+        "brotli": 28654,
+        "zstd": 30062
+      },
+      "total": {
+        "raw": 103224,
+        "gzip": 32160,
+        "brotli": 28654,
+        "zstd": 30062
+      }
+    },
+    "repair × rolldown": {
+      "initial": {
+        "raw": 102663,
+        "gzip": 31240,
+        "brotli": 27848,
+        "zstd": 29131
+      },
+      "total": {
+        "raw": 102663,
+        "gzip": 31240,
+        "brotli": 27848,
+        "zstd": 29131
+      }
+    },
+    "repair × bun": {
+      "initial": {
+        "raw": 104914,
+        "gzip": 32226,
+        "brotli": 28660,
+        "zstd": 30039
+      },
+      "total": {
+        "raw": 104914,
+        "gzip": 32226,
+        "brotli": 28660,
+        "zstd": 30039
+      }
+    },
+    "find-json-span × vite": {
+      "initial": {
+        "raw": 97008,
+        "gzip": 29703,
+        "brotli": 26482,
+        "zstd": 27765
+      },
+      "total": {
+        "raw": 97008,
+        "gzip": 29703,
+        "brotli": 26482,
+        "zstd": 27765
+      }
+    },
+    "find-json-span × webpack": {
+      "initial": {
+        "raw": 98689,
+        "gzip": 29638,
+        "brotli": 26284,
+        "zstd": 27619
+      },
+      "total": {
+        "raw": 98689,
+        "gzip": 29638,
+        "brotli": 26284,
+        "zstd": 27619
+      }
+    },
+    "find-json-span × rspack": {
+      "initial": {
+        "raw": 96606,
+        "gzip": 29411,
+        "brotli": 26247,
+        "zstd": 27459
+      },
+      "total": {
+        "raw": 96606,
+        "gzip": 29411,
+        "brotli": 26247,
+        "zstd": 27459
+      }
+    },
+    "find-json-span × esbuild": {
+      "initial": {
+        "raw": 97783,
+        "gzip": 30415,
+        "brotli": 27094,
+        "zstd": 28458
+      },
+      "total": {
+        "raw": 97783,
+        "gzip": 30415,
+        "brotli": 27094,
+        "zstd": 28458
+      }
+    },
+    "find-json-span × rolldown": {
+      "initial": {
+        "raw": 97271,
+        "gzip": 29490,
+        "brotli": 26310,
+        "zstd": 27568
+      },
+      "total": {
+        "raw": 97271,
+        "gzip": 29490,
+        "brotli": 26310,
+        "zstd": 27568
+      }
+    },
+    "find-json-span × bun": {
+      "initial": {
+        "raw": 99487,
+        "gzip": 30453,
+        "brotli": 27163,
+        "zstd": 28427
+      },
+      "total": {
+        "raw": 99487,
+        "gzip": 30453,
+        "brotli": 27163,
+        "zstd": 28427
+      }
+    },
+    "stream × vite": {
+      "initial": {
+        "raw": 106454,
+        "gzip": 32696,
+        "brotli": 29030,
+        "zstd": 30477
+      },
+      "total": {
+        "raw": 106454,
+        "gzip": 32696,
+        "brotli": 29030,
+        "zstd": 30477
+      }
+    },
+    "stream × webpack": {
+      "initial": {
+        "raw": 108570,
+        "gzip": 32857,
+        "brotli": 29022,
+        "zstd": 30475
+      },
+      "total": {
+        "raw": 108570,
+        "gzip": 32857,
+        "brotli": 29022,
+        "zstd": 30475
+      }
+    },
+    "stream × rspack": {
+      "initial": {
+        "raw": 106189,
+        "gzip": 32563,
+        "brotli": 28924,
+        "zstd": 30326
+      },
+      "total": {
+        "raw": 106189,
+        "gzip": 32563,
+        "brotli": 28924,
+        "zstd": 30326
+      }
+    },
+    "stream × esbuild": {
+      "initial": {
+        "raw": 107375,
+        "gzip": 33603,
+        "brotli": 29916,
+        "zstd": 31402
+      },
+      "total": {
+        "raw": 107375,
+        "gzip": 33603,
+        "brotli": 29916,
+        "zstd": 31402
+      }
+    },
+    "stream × rolldown": {
+      "initial": {
+        "raw": 106882,
+        "gzip": 32522,
+        "brotli": 28973,
+        "zstd": 30321
+      },
+      "total": {
+        "raw": 106882,
+        "gzip": 32522,
+        "brotli": 28973,
+        "zstd": 30321
+      }
+    },
+    "stream × bun": {
+      "initial": {
+        "raw": 109381,
+        "gzip": 33658,
+        "brotli": 29991,
+        "zstd": 31404
+      },
+      "total": {
+        "raw": 109381,
+        "gzip": 33658,
+        "brotli": 29991,
+        "zstd": 31404
+      }
+    },
+    "stream-view × vite": {
+      "initial": {
+        "raw": 109632,
+        "gzip": 33752,
+        "brotli": 29983,
+        "zstd": 31443
+      },
+      "total": {
+        "raw": 109632,
+        "gzip": 33752,
+        "brotli": 29983,
+        "zstd": 31443
+      }
+    },
+    "stream-view × webpack": {
+      "initial": {
+        "raw": 111844,
+        "gzip": 33890,
+        "brotli": 29993,
+        "zstd": 31413
+      },
+      "total": {
+        "raw": 111844,
+        "gzip": 33890,
+        "brotli": 29993,
+        "zstd": 31413
+      }
+    },
+    "stream-view × rspack": {
+      "initial": {
+        "raw": 109344,
+        "gzip": 33581,
+        "brotli": 29814,
+        "zstd": 31230
+      },
+      "total": {
+        "raw": 109344,
+        "gzip": 33581,
+        "brotli": 29814,
+        "zstd": 31230
+      }
+    },
+    "stream-view × esbuild": {
+      "initial": {
+        "raw": 110604,
+        "gzip": 34704,
+        "brotli": 30853,
+        "zstd": 32393
+      },
+      "total": {
+        "raw": 110604,
+        "gzip": 34704,
+        "brotli": 30853,
+        "zstd": 32393
+      }
+    },
+    "stream-view × rolldown": {
+      "initial": {
+        "raw": 110092,
+        "gzip": 33575,
+        "brotli": 29883,
+        "zstd": 31292
+      },
+      "total": {
+        "raw": 110092,
+        "gzip": 33575,
+        "brotli": 29883,
+        "zstd": 31292
+      }
+    },
+    "stream-view × bun": {
+      "initial": {
+        "raw": 112694,
+        "gzip": 34768,
+        "brotli": 30910,
+        "zstd": 32388
+      },
+      "total": {
+        "raw": 112694,
+        "gzip": 34768,
+        "brotli": 30910,
+        "zstd": 32388
+      }
+    },
+    "stream-shared-view × vite": {
+      "initial": {
+        "raw": 99999,
+        "gzip": 30823,
+        "brotli": 27472,
+        "zstd": 28812
+      },
+      "total": {
+        "raw": 99999,
+        "gzip": 30823,
+        "brotli": 27472,
+        "zstd": 28812
+      }
+    },
+    "stream-shared-view × webpack": {
+      "initial": {
+        "raw": 101940,
+        "gzip": 31037,
+        "brotli": 27446,
+        "zstd": 28825
+      },
+      "total": {
+        "raw": 101940,
+        "gzip": 31037,
+        "brotli": 27446,
+        "zstd": 28825
+      }
+    },
+    "stream-shared-view × rspack": {
+      "initial": {
+        "raw": 99678,
+        "gzip": 30745,
+        "brotli": 27283,
+        "zstd": 28618
+      },
+      "total": {
+        "raw": 99678,
+        "gzip": 30745,
+        "brotli": 27283,
+        "zstd": 28618
+      }
+    },
+    "stream-shared-view × esbuild": {
+      "initial": {
+        "raw": 100903,
+        "gzip": 31660,
+        "brotli": 28284,
+        "zstd": 29643
+      },
+      "total": {
+        "raw": 100903,
+        "gzip": 31660,
+        "brotli": 28284,
+        "zstd": 29643
+      }
+    },
+    "stream-shared-view × rolldown": {
+      "initial": {
+        "raw": 100366,
+        "gzip": 30654,
+        "brotli": 27369,
+        "zstd": 28674
+      },
+      "total": {
+        "raw": 100366,
+        "gzip": 30654,
+        "brotli": 27369,
+        "zstd": 28674
+      }
+    },
+    "stream-shared-view × bun": {
+      "initial": {
+        "raw": 102735,
+        "gzip": 31765,
+        "brotli": 28347,
+        "zstd": 29665
+      },
+      "total": {
+        "raw": 102735,
+        "gzip": 31765,
+        "brotli": 28347,
+        "zstd": 29665
+      }
+    },
+    "forced-worker × vite": {
+      "initial": {
+        "raw": 21986,
+        "gzip": 8428,
+        "brotli": 7525,
+        "zstd": 8265
+      },
+      "total": {
+        "raw": 177761,
+        "gzip": 56363,
+        "brotli": 50118,
+        "zstd": 52865
+      }
+    },
+    "forced-worker × webpack": {
+      "initial": {
+        "raw": 22090,
+        "gzip": 8047,
+        "brotli": 7241,
+        "zstd": 7802
+      },
+      "total": {
+        "raw": 180884,
+        "gzip": 56863,
+        "brotli": 50207,
+        "zstd": 52962
+      }
+    },
+    "forced-worker × rspack": {
+      "initial": {
+        "raw": 21791,
+        "gzip": 8094,
+        "brotli": 7257,
+        "zstd": 7847
+      },
+      "total": {
+        "raw": 176422,
+        "gzip": 56192,
+        "brotli": 49756,
+        "zstd": 52430
+      }
+    },
+    "forced-worker × esbuild": {
+      "initial": {
+        "raw": 20527,
+        "gzip": 7733,
+        "brotli": 6940,
+        "zstd": 7554
+      },
+      "total": {
+        "raw": 176977,
+        "gzip": 57605,
+        "brotli": 51139,
+        "zstd": 53998
+      }
+    },
+    "forced-worker × rolldown": {
+      "initial": {
+        "raw": 20554,
+        "gzip": 7716,
+        "brotli": 6916,
+        "zstd": 7551
+      },
+      "total": {
+        "raw": 176495,
+        "gzip": 55711,
+        "brotli": 49573,
+        "zstd": 52206
+      }
+    },
+    "forced-worker × bun": {
+      "initial": {
+        "raw": 20693,
+        "gzip": 7763,
+        "brotli": 6928,
+        "zstd": 7591
+      },
+      "total": {
+        "raw": 179933,
+        "gzip": 57672,
+        "brotli": 51118,
+        "zstd": 53961
+      }
+    },
+    "async-cooperative-abort × vite": {
+      "initial": {
+        "raw": 112746,
+        "gzip": 34692,
+        "brotli": 30881,
+        "zstd": 32347
+      },
+      "total": {
+        "raw": 112746,
+        "gzip": 34692,
+        "brotli": 30881,
+        "zstd": 32347
+      }
+    },
+    "async-cooperative-abort × webpack": {
+      "initial": {
+        "raw": 114687,
+        "gzip": 34642,
+        "brotli": 30685,
+        "zstd": 32142
+      },
+      "total": {
+        "raw": 114687,
+        "gzip": 34642,
+        "brotli": 30685,
+        "zstd": 32142
+      }
+    },
+    "async-cooperative-abort × rspack": {
+      "initial": {
+        "raw": 112049,
+        "gzip": 34227,
+        "brotli": 30398,
+        "zstd": 31810
+      },
+      "total": {
+        "raw": 112049,
+        "gzip": 34227,
+        "brotli": 30398,
+        "zstd": 31810
+      }
+    },
+    "async-cooperative-abort × esbuild": {
+      "initial": {
+        "raw": 113630,
+        "gzip": 35608,
+        "brotli": 31681,
+        "zstd": 33209
+      },
+      "total": {
+        "raw": 113630,
+        "gzip": 35608,
+        "brotli": 31681,
+        "zstd": 33209
+      }
+    },
+    "async-cooperative-abort × rolldown": {
+      "initial": {
+        "raw": 112858,
+        "gzip": 34262,
+        "brotli": 30509,
+        "zstd": 31933
+      },
+      "total": {
+        "raw": 112858,
+        "gzip": 34262,
+        "brotli": 30509,
+        "zstd": 31933
+      }
+    },
+    "async-cooperative-abort × bun": {
+      "initial": {
+        "raw": 115554,
+        "gzip": 35614,
+        "brotli": 31637,
+        "zstd": 33185
+      },
+      "total": {
+        "raw": 115554,
+        "gzip": 35614,
+        "brotli": 31637,
+        "zstd": 33185
+      }
+    },
+    "configured-async-parse × vite": {
+      "initial": {
+        "raw": 115990,
+        "gzip": 35621,
+        "brotli": 31741,
+        "zstd": 33225
+      },
+      "total": {
+        "raw": 115990,
+        "gzip": 35621,
+        "brotli": 31741,
+        "zstd": 33225
+      }
+    },
+    "configured-async-parse × webpack": {
+      "initial": {
+        "raw": 118044,
+        "gzip": 35594,
+        "brotli": 31507,
+        "zstd": 32982
+      },
+      "total": {
+        "raw": 118044,
+        "gzip": 35594,
+        "brotli": 31507,
+        "zstd": 32982
+      }
+    },
+    "configured-async-parse × rspack": {
+      "initial": {
+        "raw": 115388,
+        "gzip": 35210,
+        "brotli": 31230,
+        "zstd": 32680
+      },
+      "total": {
+        "raw": 115388,
+        "gzip": 35210,
+        "brotli": 31230,
+        "zstd": 32680
+      }
+    },
+    "configured-async-parse × esbuild": {
+      "initial": {
+        "raw": 116934,
+        "gzip": 36625,
+        "brotli": 32533,
+        "zstd": 34158
+      },
+      "total": {
+        "raw": 116934,
+        "gzip": 36625,
+        "brotli": 32533,
+        "zstd": 34158
+      }
+    },
+    "configured-async-parse × rolldown": {
+      "initial": {
+        "raw": 116163,
+        "gzip": 35197,
+        "brotli": 31355,
+        "zstd": 32805
+      },
+      "total": {
+        "raw": 116163,
+        "gzip": 35197,
+        "brotli": 31355,
+        "zstd": 32805
+      }
+    },
+    "configured-async-parse × bun": {
+      "initial": {
+        "raw": 118901,
+        "gzip": 36627,
+        "brotli": 32542,
+        "zstd": 34107
+      },
+      "total": {
+        "raw": 118901,
+        "gzip": 36627,
+        "brotli": 32542,
+        "zstd": 34107
+      }
+    },
+    "import-named-unused × vite": {
+      "initial": {
+        "raw": 26,
+        "gzip": 46,
+        "brotli": 30,
+        "zstd": 35
+      },
+      "total": {
+        "raw": 26,
+        "gzip": 46,
+        "brotli": 30,
+        "zstd": 35
+      }
+    },
+    "import-named-unused × webpack": {
+      "initial": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      },
+      "total": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      }
+    },
+    "import-named-unused × rspack": {
+      "initial": {
+        "raw": 257,
+        "gzip": 203,
+        "brotli": 180,
+        "zstd": 191
+      },
+      "total": {
+        "raw": 257,
+        "gzip": 203,
+        "brotli": 180,
+        "zstd": 191
+      }
+    },
+    "import-named-unused × esbuild": {
+      "initial": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      },
+      "total": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      }
+    },
+    "import-named-unused × rolldown": {
+      "initial": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      },
+      "total": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      }
+    },
+    "import-named-unused × bun": {
+      "initial": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      },
+      "total": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      }
+    },
+    "import-bare × vite": {
+      "initial": {
+        "raw": 26,
+        "gzip": 46,
+        "brotli": 30,
+        "zstd": 35
+      },
+      "total": {
+        "raw": 26,
+        "gzip": 46,
+        "brotli": 30,
+        "zstd": 35
+      }
+    },
+    "import-bare × webpack": {
+      "initial": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      },
+      "total": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      }
+    },
+    "import-bare × rspack": {
+      "initial": {
+        "raw": 257,
+        "gzip": 203,
+        "brotli": 180,
+        "zstd": 191
+      },
+      "total": {
+        "raw": 257,
+        "gzip": 203,
+        "brotli": 180,
+        "zstd": 191
+      }
+    },
+    "import-bare × esbuild": {
+      "initial": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      },
+      "total": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      }
+    },
+    "import-bare × rolldown": {
+      "initial": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      },
+      "total": {
+        "raw": 28,
+        "gzip": 48,
+        "brotli": 32,
+        "zstd": 37
+      }
+    },
+    "import-bare × bun": {
+      "initial": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      },
+      "total": {
+        "raw": 27,
+        "gzip": 47,
+        "brotli": 31,
+        "zstd": 36
+      }
+    },
+    "stringify × vite": {
+      "initial": {
+        "raw": 5143,
+        "gzip": 2214,
+        "brotli": 1939,
+        "zstd": 2208
+      },
+      "total": {
+        "raw": 5143,
+        "gzip": 2214,
+        "brotli": 1939,
+        "zstd": 2208
+      }
+    },
+    "stringify × webpack": {
+      "initial": {
+        "raw": 5233,
+        "gzip": 2254,
+        "brotli": 1981,
+        "zstd": 2247
+      },
+      "total": {
+        "raw": 5233,
+        "gzip": 2254,
+        "brotli": 1981,
+        "zstd": 2247
+      }
+    },
+    "stringify × rspack": {
+      "initial": {
+        "raw": 5415,
+        "gzip": 2321,
+        "brotli": 2047,
+        "zstd": 2305
+      },
+      "total": {
+        "raw": 5415,
+        "gzip": 2321,
+        "brotli": 2047,
+        "zstd": 2305
+      }
+    },
+    "stringify × esbuild": {
+      "initial": {
+        "raw": 5187,
+        "gzip": 2248,
+        "brotli": 1976,
+        "zstd": 2239
+      },
+      "total": {
+        "raw": 5187,
+        "gzip": 2248,
+        "brotli": 1976,
+        "zstd": 2239
+      }
+    },
+    "stringify × rolldown": {
+      "initial": {
+        "raw": 5173,
+        "gzip": 2233,
+        "brotli": 1954,
+        "zstd": 2225
+      },
+      "total": {
+        "raw": 5173,
+        "gzip": 2233,
+        "brotli": 1954,
+        "zstd": 2225
+      }
+    },
+    "stringify × bun": {
+      "initial": {
+        "raw": 5263,
+        "gzip": 2241,
+        "brotli": 1963,
+        "zstd": 2229
+      },
+      "total": {
+        "raw": 5263,
+        "gzip": 2241,
+        "brotli": 1963,
+        "zstd": 2229
+      }
+    },
+    "metrics × vite": {
+      "initial": {
+        "raw": 112617,
+        "gzip": 34891,
+        "brotli": 31000,
+        "zstd": 32435
+      },
+      "total": {
+        "raw": 112617,
+        "gzip": 34891,
+        "brotli": 31000,
+        "zstd": 32435
+      }
+    },
+    "metrics × webpack": {
+      "initial": {
+        "raw": 114671,
+        "gzip": 34691,
+        "brotli": 30695,
+        "zstd": 32214
+      },
+      "total": {
+        "raw": 114671,
+        "gzip": 34691,
+        "brotli": 30695,
+        "zstd": 32214
+      }
+    },
+    "metrics × rspack": {
+      "initial": {
+        "raw": 111758,
+        "gzip": 34330,
+        "brotli": 30491,
+        "zstd": 31875
+      },
+      "total": {
+        "raw": 111758,
+        "gzip": 34330,
+        "brotli": 30491,
+        "zstd": 31875
+      }
+    },
+    "metrics × esbuild": {
+      "initial": {
+        "raw": 113456,
+        "gzip": 35836,
+        "brotli": 31879,
+        "zstd": 33337
+      },
+      "total": {
+        "raw": 113456,
+        "gzip": 35836,
+        "brotli": 31879,
+        "zstd": 33337
+      }
+    },
+    "metrics × rolldown": {
+      "initial": {
+        "raw": 112949,
+        "gzip": 34492,
+        "brotli": 30641,
+        "zstd": 32030
+      },
+      "total": {
+        "raw": 112949,
+        "gzip": 34492,
+        "brotli": 30641,
+        "zstd": 32030
+      }
+    },
+    "metrics × bun": {
+      "initial": {
+        "raw": 115480,
+        "gzip": 35841,
+        "brotli": 31784,
+        "zstd": 33286
+      },
+      "total": {
+        "raw": 115480,
+        "gzip": 35841,
+        "brotli": 31784,
+        "zstd": 33286
+      }
+    },
+    "try-parsers × vite": {
+      "initial": {
+        "raw": 3366,
+        "gzip": 1643,
+        "brotli": 1396,
+        "zstd": 1643
+      },
+      "total": {
+        "raw": 3366,
+        "gzip": 1643,
+        "brotli": 1396,
+        "zstd": 1643
+      }
+    },
+    "try-parsers × webpack": {
+      "initial": {
+        "raw": 1053,
+        "gzip": 573,
+        "brotli": 498,
+        "zstd": 569
+      },
+      "total": {
+        "raw": 1053,
+        "gzip": 573,
+        "brotli": 498,
+        "zstd": 569
+      }
+    },
+    "try-parsers × rspack": {
+      "initial": {
+        "raw": 3183,
+        "gzip": 1606,
+        "brotli": 1371,
+        "zstd": 1607
+      },
+      "total": {
+        "raw": 3183,
+        "gzip": 1606,
+        "brotli": 1371,
+        "zstd": 1607
+      }
+    },
+    "try-parsers × esbuild": {
+      "initial": {
+        "raw": 3386,
+        "gzip": 1646,
+        "brotli": 1403,
+        "zstd": 1642
+      },
+      "total": {
+        "raw": 3386,
+        "gzip": 1646,
+        "brotli": 1403,
+        "zstd": 1642
+      }
+    },
+    "try-parsers × rolldown": {
+      "initial": {
+        "raw": 3370,
+        "gzip": 1644,
+        "brotli": 1400,
+        "zstd": 1641
+      },
+      "total": {
+        "raw": 3370,
+        "gzip": 1644,
+        "brotli": 1400,
+        "zstd": 1641
+      }
+    },
+    "try-parsers × bun": {
+      "initial": {
+        "raw": 3402,
+        "gzip": 1644,
+        "brotli": 1402,
+        "zstd": 1640
+      },
+      "total": {
+        "raw": 3402,
+        "gzip": 1644,
+        "brotli": 1402,
+        "zstd": 1640
+      }
+    },
+    "diagnostics-feature × vite": {
+      "initial": {
+        "raw": 108994,
+        "gzip": 33730,
+        "brotli": 29962,
+        "zstd": 31404
+      },
+      "total": {
+        "raw": 108994,
+        "gzip": 33730,
+        "brotli": 29962,
+        "zstd": 31404
+      }
+    },
+    "diagnostics-feature × webpack": {
+      "initial": {
+        "raw": 110986,
+        "gzip": 33533,
+        "brotli": 29754,
+        "zstd": 31128
+      },
+      "total": {
+        "raw": 110986,
+        "gzip": 33533,
+        "brotli": 29754,
+        "zstd": 31128
+      }
+    },
+    "diagnostics-feature × rspack": {
+      "initial": {
+        "raw": 108364,
+        "gzip": 33190,
+        "brotli": 29473,
+        "zstd": 30853
+      },
+      "total": {
+        "raw": 108364,
+        "gzip": 33190,
+        "brotli": 29473,
+        "zstd": 30853
+      }
+    },
+    "diagnostics-feature × esbuild": {
+      "initial": {
+        "raw": 109824,
+        "gzip": 34565,
+        "brotli": 30751,
+        "zstd": 32207
+      },
+      "total": {
+        "raw": 109824,
+        "gzip": 34565,
+        "brotli": 30751,
+        "zstd": 32207
+      }
+    },
+    "diagnostics-feature × rolldown": {
+      "initial": {
+        "raw": 109298,
+        "gzip": 33331,
+        "brotli": 29643,
+        "zstd": 31004
+      },
+      "total": {
+        "raw": 109298,
+        "gzip": 33331,
+        "brotli": 29643,
+        "zstd": 31004
+      }
+    },
+    "diagnostics-feature × bun": {
+      "initial": {
+        "raw": 111754,
+        "gzip": 34604,
+        "brotli": 30721,
+        "zstd": 32167
+      },
+      "total": {
+        "raw": 111754,
+        "gzip": 34604,
+        "brotli": 30721,
+        "zstd": 32167
+      }
+    },
+    "locations-feature × vite": {
+      "initial": {
+        "raw": 104268,
+        "gzip": 32162,
+        "brotli": 28712,
+        "zstd": 30101
+      },
+      "total": {
+        "raw": 104268,
+        "gzip": 32162,
+        "brotli": 28712,
+        "zstd": 30101
+      }
+    },
+    "locations-feature × webpack": {
+      "initial": {
+        "raw": 106046,
+        "gzip": 31976,
+        "brotli": 28444,
+        "zstd": 29813
+      },
+      "total": {
+        "raw": 106046,
+        "gzip": 31976,
+        "brotli": 28444,
+        "zstd": 29813
+      }
+    },
+    "locations-feature × rspack": {
+      "initial": {
+        "raw": 103622,
+        "gzip": 31685,
+        "brotli": 28256,
+        "zstd": 29563
+      },
+      "total": {
+        "raw": 103622,
+        "gzip": 31685,
+        "brotli": 28256,
+        "zstd": 29563
+      }
+    },
+    "locations-feature × esbuild": {
+      "initial": {
+        "raw": 105060,
+        "gzip": 32965,
+        "brotli": 29459,
+        "zstd": 30876
+      },
+      "total": {
+        "raw": 105060,
+        "gzip": 32965,
+        "brotli": 29459,
+        "zstd": 30876
+      }
+    },
+    "locations-feature × rolldown": {
+      "initial": {
+        "raw": 104392,
+        "gzip": 31742,
+        "brotli": 28373,
+        "zstd": 29693
+      },
+      "total": {
+        "raw": 104392,
+        "gzip": 31742,
+        "brotli": 28373,
+        "zstd": 29693
+      }
+    },
+    "locations-feature × bun": {
+      "initial": {
+        "raw": 106922,
+        "gzip": 32997,
+        "brotli": 29445,
+        "zstd": 30838
+      },
+      "total": {
+        "raw": 106922,
+        "gzip": 32997,
+        "brotli": 29445,
+        "zstd": 30838
+      }
+    },
+    "select-feature × vite": {
+      "initial": {
+        "raw": 116261,
+        "gzip": 35895,
+        "brotli": 31932,
+        "zstd": 33363
+      },
+      "total": {
+        "raw": 116261,
+        "gzip": 35895,
+        "brotli": 31932,
+        "zstd": 33363
+      }
+    },
+    "select-feature × webpack": {
+      "initial": {
+        "raw": 118309,
+        "gzip": 35785,
+        "brotli": 31651,
+        "zstd": 33125
+      },
+      "total": {
+        "raw": 118309,
+        "gzip": 35785,
+        "brotli": 31651,
+        "zstd": 33125
+      }
+    },
+    "select-feature × rspack": {
+      "initial": {
+        "raw": 115681,
+        "gzip": 35391,
+        "brotli": 31388,
+        "zstd": 32830
+      },
+      "total": {
+        "raw": 115681,
+        "gzip": 35391,
+        "brotli": 31388,
+        "zstd": 32830
+      }
+    },
+    "select-feature × esbuild": {
+      "initial": {
+        "raw": 117148,
+        "gzip": 36820,
+        "brotli": 32735,
+        "zstd": 34266
+      },
+      "total": {
+        "raw": 117148,
+        "gzip": 36820,
+        "brotli": 32735,
+        "zstd": 34266
+      }
+    },
+    "select-feature × rolldown": {
+      "initial": {
+        "raw": 116441,
+        "gzip": 35476,
+        "brotli": 31543,
+        "zstd": 32948
+      },
+      "total": {
+        "raw": 116441,
+        "gzip": 35476,
+        "brotli": 31543,
+        "zstd": 32948
+      }
+    },
+    "select-feature × bun": {
+      "initial": {
+        "raw": 119294,
+        "gzip": 36848,
+        "brotli": 32688,
+        "zstd": 34212
+      },
+      "total": {
+        "raw": 119294,
+        "gzip": 36848,
+        "brotli": 32688,
+        "zstd": 34212
+      }
+    },
+    "decoded-fragments × vite": {
+      "initial": {
+        "raw": 112482,
+        "gzip": 34560,
+        "brotli": 30627,
+        "zstd": 32099
+      },
+      "total": {
+        "raw": 112482,
+        "gzip": 34560,
+        "brotli": 30627,
+        "zstd": 32099
+      }
+    },
+    "decoded-fragments × webpack": {
+      "initial": {
+        "raw": 114651,
+        "gzip": 34758,
+        "brotli": 30599,
+        "zstd": 32101
+      },
+      "total": {
+        "raw": 114651,
+        "gzip": 34758,
+        "brotli": 30599,
+        "zstd": 32101
+      }
+    },
+    "decoded-fragments × rspack": {
+      "initial": {
+        "raw": 112089,
+        "gzip": 34426,
+        "brotli": 30383,
+        "zstd": 31836
+      },
+      "total": {
+        "raw": 112089,
+        "gzip": 34426,
+        "brotli": 30383,
+        "zstd": 31836
+      }
+    },
+    "decoded-fragments × esbuild": {
+      "initial": {
+        "raw": 113453,
+        "gzip": 35593,
+        "brotli": 31575,
+        "zstd": 33100
+      },
+      "total": {
+        "raw": 113453,
+        "gzip": 35593,
+        "brotli": 31575,
+        "zstd": 33100
+      }
+    },
+    "decoded-fragments × rolldown": {
+      "initial": {
+        "raw": 112970,
+        "gzip": 34398,
+        "brotli": 30530,
+        "zstd": 31945
+      },
+      "total": {
+        "raw": 112970,
+        "gzip": 34398,
+        "brotli": 30530,
+        "zstd": 31945
+      }
+    },
+    "decoded-fragments × bun": {
+      "initial": {
+        "raw": 115543,
+        "gzip": 35710,
+        "brotli": 31571,
+        "zstd": 33103
+      },
+      "total": {
+        "raw": 115543,
+        "gzip": 35710,
+        "brotli": 31571,
+        "zstd": 33103
+      }
+    },
+    "source-fragments × vite": {
+      "initial": {
+        "raw": 117932,
+        "gzip": 35991,
+        "brotli": 31890,
+        "zstd": 33368
+      },
+      "total": {
+        "raw": 117932,
+        "gzip": 35991,
+        "brotli": 31890,
+        "zstd": 33368
+      }
+    },
+    "source-fragments × webpack": {
+      "initial": {
+        "raw": 120237,
+        "gzip": 36216,
+        "brotli": 31858,
+        "zstd": 33419
+      },
+      "total": {
+        "raw": 120237,
+        "gzip": 36216,
+        "brotli": 31858,
+        "zstd": 33419
+      }
+    },
+    "source-fragments × rspack": {
+      "initial": {
+        "raw": 117599,
+        "gzip": 35909,
+        "brotli": 31686,
+        "zstd": 33143
+      },
+      "total": {
+        "raw": 117599,
+        "gzip": 35909,
+        "brotli": 31686,
+        "zstd": 33143
+      }
+    },
+    "source-fragments × esbuild": {
+      "initial": {
+        "raw": 118920,
+        "gzip": 37069,
+        "brotli": 32788,
+        "zstd": 34435
+      },
+      "total": {
+        "raw": 118920,
+        "gzip": 37069,
+        "brotli": 32788,
+        "zstd": 34435
+      }
+    },
+    "source-fragments × rolldown": {
+      "initial": {
+        "raw": 118467,
+        "gzip": 35819,
+        "brotli": 31698,
+        "zstd": 33213
+      },
+      "total": {
+        "raw": 118467,
+        "gzip": 35819,
+        "brotli": 31698,
+        "zstd": 33213
+      }
+    },
+    "source-fragments × bun": {
+      "initial": {
+        "raw": 121090,
+        "gzip": 37203,
+        "brotli": 32870,
+        "zstd": 34430
+      },
+      "total": {
+        "raw": 121090,
+        "gzip": 37203,
+        "brotli": 32870,
+        "zstd": 34430
+      }
+    },
+    "skip-feature × vite": {
+      "initial": {
+        "raw": 107409,
+        "gzip": 33289,
+        "brotli": 29651,
+        "zstd": 31085
+      },
+      "total": {
+        "raw": 107409,
+        "gzip": 33289,
+        "brotli": 29651,
+        "zstd": 31085
+      }
+    },
+    "skip-feature × webpack": {
+      "initial": {
+        "raw": 109245,
+        "gzip": 33125,
+        "brotli": 29373,
+        "zstd": 30789
+      },
+      "total": {
+        "raw": 109245,
+        "gzip": 33125,
+        "brotli": 29373,
+        "zstd": 30789
+      }
+    },
+    "skip-feature × rspack": {
+      "initial": {
+        "raw": 106719,
+        "gzip": 32783,
+        "brotli": 29171,
+        "zstd": 30523
+      },
+      "total": {
+        "raw": 106719,
+        "gzip": 32783,
+        "brotli": 29171,
+        "zstd": 30523
+      }
+    },
+    "skip-feature × esbuild": {
+      "initial": {
+        "raw": 108223,
+        "gzip": 34148,
+        "brotli": 30403,
+        "zstd": 31918
+      },
+      "total": {
+        "raw": 108223,
+        "gzip": 34148,
+        "brotli": 30403,
+        "zstd": 31918
+      }
+    },
+    "skip-feature × rolldown": {
+      "initial": {
+        "raw": 107571,
+        "gzip": 32871,
+        "brotli": 29297,
+        "zstd": 30667
+      },
+      "total": {
+        "raw": 107571,
+        "gzip": 32871,
+        "brotli": 29297,
+        "zstd": 30667
+      }
+    },
+    "skip-feature × bun": {
+      "initial": {
+        "raw": 110158,
+        "gzip": 34177,
+        "brotli": 30461,
+        "zstd": 31888
+      },
+      "total": {
+        "raw": 110158,
+        "gzip": 34177,
+        "brotli": 30461,
+        "zstd": 31888
+      }
+    }
+  }
+}

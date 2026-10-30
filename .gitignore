@@ -1,0 +1,16 @@
+dist/
+node_modules/
+*.tgz
+.DS_Store
+.codex/
+corpus/.shards/
+corpus/.reach/
+# Generated on demand by `bun scripts/corpus/record.ts --out`; Git keeps only corpus/contract.sha256.
+corpus/contract.jsonl
+release-artifacts/
+bench/prior-art/.*-candidate.json
+*.tsbuildinfo
+rust/target/
+rust/**/target/
+# A status-line plugin writes session state into whatever directory a session works in; it is never source.
+.omc/

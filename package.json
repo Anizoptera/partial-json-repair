@@ -1,0 +1,149 @@
+{
+  "name": "partial-json-repair",
+  "version": "0.1.0",
+  "description": "Parse and repair broken, truncated or streaming JSON. Recovers values from LLM output, reports every repair it made, and streams partial objects as they arrive. Zero dependencies.",
+  "keywords": [
+    "browser",
+    "bun",
+    "deno",
+    "fuzzy",
+    "incomplete-json",
+    "json",
+    "json-parser",
+    "json-repair",
+    "llm",
+    "node",
+    "partial-json",
+    "recovery",
+    "streaming",
+    "zero-dependencies"
+  ],
+  "license": "Apache-2.0",
+  "author": "Anizoptera",
+  "contributors": [
+    "Art Shendrik"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anizoptera/partial-json-repair.git"
+  },
+  "files": [
+    "dist",
+    "!dist/async-worker.d.ts",
+    "!dist/async-worker.d.ts.map",
+    "src",
+    "!**/*.test.ts",
+    "!src/**/AGENTS.md",
+    "!src/**/CLAUDE.md",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "docs/PRIOR-ART.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./async": {
+      "types": "./dist/async.d.ts",
+      "default": "./dist/async.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "treeshake:check": "bun scripts/check-treeshake.ts",
+    "artifact:check": "bun scripts/check-artifact.ts",
+    "api:check": "bun scripts/api.ts check",
+    "api:update": "bun scripts/api.ts update",
+    "release:check": "bun scripts/check-release.ts",
+    "async:conform": "bun scripts/check-async.ts",
+    "bench": "bun bench/primitives.bench.ts && bun bench/snapshot.bench.ts && bun bench/stream.bench.ts",
+    "bench:baseline": "bun bench/prior-art/baseline.ts",
+    "bench:baseline:accept": "bun bench/prior-art/baseline.ts --accept",
+    "bench:async": "bun bench/async.ts",
+    "build": "tsdown",
+    "check": "bash scripts/clean-generated.sh --after bun scripts/check.ts",
+    "check:commit": "bash scripts/clean-generated.sh --after bun scripts/check.ts --commit",
+    "clean": "bash scripts/clean-generated.sh",
+    "corpus:conform": "bun scripts/corpus/verify.ts",
+    "corpus:conform:packed": "bun --preload ./scripts/packed-entries.ts scripts/corpus/verify.ts",
+    "corpus:record": "bun scripts/corpus/record.ts --write",
+    "fixtures:check": "bun scripts/check-fixtures.ts",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "format:stdin": "oxfmt --stdin-filepath",
+    "invariants:check": "bun scripts/check-invariants.ts",
+    "jit:check": "bun scripts/check-jit.ts",
+    "steering:check": "bun scripts/check-steering.ts",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
+    "platform:check": "bash scripts/clean-generated.sh --after bash scripts/check-platform.sh",
+    "prepare": "bun scripts/prepare.ts",
+    "prepublishOnly": "echo 'No local publish: a pushed v<version> tag publishes through .github/workflows/release.yml, the only place npm provenance can be signed. See docs/RELEASE.md.' >&2 && exit 1",
+    "rust:check": "bun run rust:check:commit && bun scripts/rust/check-features.ts && bun scripts/rust/conform.ts",
+    "rust:check:commit": "bun scripts/rust/cargo.ts test --target-dir rust/target/commit --manifest-path rust/Cargo.toml --workspace --all-features && bun scripts/rust/cargo.ts clippy --target-dir rust/target/commit --manifest-path rust/Cargo.toml --all-targets --all-features -- -D warnings",
+    "rust:conform": "bun scripts/rust/conform.ts",
+    "test": "vitest run",
+    "test:bun": "bun test --parallel --no-isolate ./test/",
+    "test:check": "bun scripts/check-tests.ts",
+    "test:packed": "PJR_TEST_PACKED=1 vitest run",
+    "typecheck": "bun scripts/typecheck.ts",
+    "wiring:check": "bun scripts/check-wiring.ts",
+    "format:rust": "bun scripts/rust/cargo.ts fmt --all --manifest-path rust/Cargo.toml",
+    "bench:baseline:routes": "bun bench/prior-art/baseline.ts --routes",
+    "size:check": "bun scripts/size-check.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@anizoptera/publish-clean": "^0.10.0",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@microsoft/api-extractor": "7.60.0",
+    "@rspack/core": "2.2.9",
+    "@types/bun": "^1.4.4",
+    "@types/node": "^26.6.5",
+    "esbuild": "0.28.2",
+    "mdast-util-from-markdown": "2.1.0",
+    "miniflare": "4.20260730.0",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "oxlint-tsgolint": "^7.0.2005",
+    "playwright-core": "1.64.1",
+    "pnpm": "^12.16.1",
+    "publint": "^0.3.25",
+    "rolldown": "1.2.15",
+    "terser-webpack-plugin": "5.6.1",
+    "tinybench": "^6.2.2",
+    "tsdown": "^0.23.3",
+    "typescript": "npm:typescript@^7.0.2",
+    "typescript-6": "npm:typescript@^6.0.3",
+    "vite": "8.3.5",
+    "vitest": "^5.0.5",
+    "webpack": "5.112.2"
+  },
+  "overrides": {
+    "workerd": "1.20261026.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publish-clean": {
+    "validateArtifact": [
+      "bun",
+      "scripts/check-artifact.ts"
+    ],
+    "allowUnreferenced": [
+      "src",
+      "dist/worker-executor.js",
+      "dist/worker-receive.js"
+    ]
+  },
+  "trustedDependencies": [
+    "pnpm"
+  ]
+}
