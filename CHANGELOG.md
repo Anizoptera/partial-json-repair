@@ -3,6 +3,20 @@
 Notable user-visible changes, newest first.
 Revise unpublished sections when behaviour changes; keep released notes unchanged and write later changes under Unreleased.
 
+## 0.1.1 — 2026-10-31
+
+Faster parsing; values, reports and the API are unchanged.
+
+### Changed
+
+- **Long strings no longer slow `parse` down.** Clean or cut-off input whose strings run to
+  kilobytes was up to ~8x slower than `JSON.parse`; it now runs at about `JSON.parse` speed
+  (measured on Bun 1.4.4).
+- **Streams are about 4x faster on records of short fields.** `parseStream` and
+  `createStreamParser` hand each container that closed undamaged to `JSON.parse` instead of reading
+  it character by character (Bun 1.4.4, 4096-character chunks). Streams with `diagnostics`,
+  `select` or `sharedView` still read every character. Stream bundles grow by about 0.9 KB gzip.
+
 ## 0.1.0 — 2026-10-30
 
 First release. `partial-json-repair` recovers values from damaged or still-streaming JSON, such as
