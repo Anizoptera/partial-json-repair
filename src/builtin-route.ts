@@ -8,6 +8,7 @@
 
 import type { ResolvedOptions } from "./options";
 import { DANGEROUS_KEY_NAMES } from "./builder";
+import { closingQuote } from "./chars";
 import { ownText } from "./lexical-window";
 import { MAX_EXACT_INT_DIGITS, needsExact, UNDERFLOW_FRACTION_DIGITS } from "./number-fidelity";
 import { bareFailure, spanOf } from "./parser-outcome";
@@ -48,19 +49,11 @@ export const faithfulEnd = (
   // count containers at all, unless it must find the closer.
   const trackDepth = closes || limit - from > maxDepth * 2;
   let depth = 0;
-  let quote = false;
-  let escaped = false;
   for (let i = from; i < limit; i++) {
     const c = text.charCodeAt(i);
-    if (quote) {
-      if (escaped) escaped = false;
-      else if (c === 0x5c) escaped = true;
-      else if (c === 0x22) quote = false;
-      else if (c < 0x20) return -1 - i;
-      continue;
-    }
     if (c === 0x22) {
-      quote = true;
+      i = closingQuote(text, i + 1, limit);
+      if (i < 0) return closes ? -1 - limit : limit;
       continue;
     }
     if (trackDepth && (c === 0x7b || c === 0x5b)) {

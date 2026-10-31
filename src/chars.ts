@@ -243,3 +243,19 @@ export const digitValue = (c: number): number =>
       : c >= UPPER_A && c <= UPPER_F
         ? c - UPPER_A + 10
         : 99;
+
+/**
+ * The index of the quote that closes a string whose content starts at `from`, or -1 before `limit`.
+ * `indexOf` runs natively, many times faster than a JavaScript loop over long string content; a
+ * quote preceded by an odd run of backslashes is escaped. Raw control characters and undefined
+ * escapes are not looked for: callers use this only where `JSON.parse` then reads the same text and
+ * rejects both, which hands the text to the scanner.
+ */
+export const closingQuote = (text: string, from: number, limit: number): number => {
+  for (let q = text.indexOf('"', from); q >= 0 && q < limit; q = text.indexOf('"', q + 1)) {
+    let b = q;
+    while (b > from && text.charCodeAt(b - 1) === BACKSLASH) b--;
+    if ((q - b) % 2 === 0) return q;
+  }
+  return -1;
+};

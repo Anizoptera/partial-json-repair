@@ -26,7 +26,7 @@
 import type { ResolvedOptions } from "./options";
 import type { Cut, CutKind } from "./types";
 import { DANGEROUS_KEY_NAMES } from "./builder";
-import { isExtraWhitespace, isInfoChar } from "./chars";
+import { closingQuote, isExtraWhitespace, isInfoChar } from "./chars";
 import { keyText } from "./cut";
 import { MAX_EXACT_INT_DIGITS, needsExact, UNDERFLOW_FRACTION_DIGITS } from "./number-fidelity";
 
@@ -151,6 +151,7 @@ export const preScan = (text: string, opts: ResolvedOptions): PreScan => {
   // `maxBuffer` bounds streams only, but declining here costs nothing on any realistic input and
   // keeps the gate from ever being the one path that reads past a configured bound.
   if (n > opts.maxBuffer) return SCANNER;
+  needleAt.fill(-1);
   // `keep` writes dangerous keys as own data, which is exactly what `JSON.parse` does; only `drop`,
   // `reject` and extra keys need the keys read.
   const dangerous: ReadonlySet<string> | undefined =
@@ -388,7 +389,7 @@ export const preScan = (text: string, opts: ResolvedOptions): PreScan => {
       continue;
     }
     if (c === QUOTE) {
-      const close = stringEnd(text, i + 1);
+      const close = valueStringEnd(text, i + 1);
       if (close === INVALID) return SCANNER;
       if (close < 0) {
         if (quoteRisk) return SCANNER;
@@ -601,6 +602,63 @@ const stringEnd = (text: string, from: number): number => {
   return -1 - n;
 };
 
+/**
+ * `stringEnd` for a value string, found with native `indexOf` instead of a JavaScript loop over its
+ * content: long values made this gate several times slower than `JSON.parse` itself. Only a value
+ * holding a backslash, a raw line break or a tab, or one the input cuts, is read by `stringEnd`,
+ * since those need its escape and control checks. The rarer raw control characters are not looked
+ * for: `JSON.parse` rejects them on every route this gate picks, and `parseRouted` then hands the
+ * text to the scanner. Keys always use `stringEnd`: `keyAt` decodes them with a `JSON.parse` that
+ * must not throw.
+ */
+const valueStringEnd = (text: string, from: number): number => {
+  const close = closingQuote(text, from, text.length);
+  if (
+    close < 0 ||
+    nextOf(text, BACKSLASH_AT, from) < close ||
+    nextOf(text, LF_AT, from) < close ||
+    nextOf(text, CR_AT, from) < close ||
+    nextOf(text, TAB_AT, from) < close
+  )
+    return stringEnd(text, from);
+  quoteRisk = false;
+  for (
+    let a = nextOf(text, APOSTROPHE_AT, from);
+    a < close;
+    a = nextOf(text, APOSTROPHE_AT, a + 1)
+  ) {
+    const d = text.charCodeAt(a + 1);
+    if (d === COMMA || d === COLON || d === CLOSE_BRACE || d === CLOSE_BRACKET) {
+      quoteRisk = true;
+      break;
+    }
+  }
+  return close;
+};
+
+const NEEDLES = ["'", "\\", "\n", "\r", "\t"];
+const APOSTROPHE_AT = 0;
+const BACKSLASH_AT = 1;
+const LF_AT = 2;
+const CR_AT = 3;
+const TAB_AT = 4;
+/**
+ * Per needle, the last query position and its answer. An answer holds for every later query up to
+ * it, so the gate's forward walk searches each stretch of text once per needle, not once per
+ * string. `preScan` clears the answers for each new text.
+ */
+const needleFrom = [-1, -1, -1, -1, -1];
+const needleAt = [-1, -1, -1, -1, -1];
+
+/** The first `NEEDLES[k]` at or after `from`, or the text's length. */
+const nextOf = (text: string, k: number, from: number): number => {
+  const at = needleAt[k] as number;
+  if (from >= (needleFrom[k] as number) && from <= at) return at;
+  const found = text.indexOf(NEEDLES[k] as string, from);
+  needleFrom[k] = from;
+  return (needleAt[k] = found < 0 ? text.length : found);
+};
+
 /** The decoded key whose quotes sit at `open` and `close`. Escapes are rare, so they alone pay a decode. */
 const keyAt = (text: string, open: number, close: number): string => {
   const raw = text.slice(open + 1, close);
@@ -771,7 +829,8 @@ export const parseRouted = (text: string, opts: ResolvedOptions): Routed | undef
       routeText(text, verdict, opts.cutSuffix === "" ? undefined : opts.cutSuffix),
     );
   } catch {
-    // Unreachable when the gate is right; the scanner's answer is the correct one either way.
+    // A value string with a raw control character or an undefined escape lands here by design
+    // (`valueStringEnd`): the scanner answers it.
     return undefined;
   }
   return verdict.route === "cut-off"
