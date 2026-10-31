@@ -34,11 +34,18 @@ fixed and where the reply was cut.
 - **The same value however it arrives.** Text or bytes, one chunk or any split, synchronous or
   async: you get what parsing the whole text at once gives.
 - **Never throws for bad input.** Every failure is a typed value carrying whatever was recovered.
+- **Keeps your thread responsive and stops when told.** `partial-json-repair/async` runs a call in
+  slices on the same thread or in a worker, and an `AbortSignal` stops it with what was read so far.
+- **Bounded on untrusted input.** Depth, buffered text and retained values each have a `max*` limit
+  that ends in a typed `limit-reached` failure, never a stack overflow, and reports are capped too.
+  `__proto__` and the other dangerous keys are stored as data, dropped or refused, never assigned.
 
 Zero runtime dependencies. One ESM build runs in browsers, Node, Bun, Deno and edge runtimes: the
 root entry imports nothing platform-specific, and `/async` loads `node:worker_threads` only when it
 starts a worker. You pay only for what you import: a bundle that uses just `parse` carries no
-report, selector, streaming or live-view code. Types are checked against TypeScript 6 and 7 in CI.
+report, selector, streaming or live-view code, and one that imports the package without calling it
+keeps 47 bytes ([what each import costs](#what-each-import-costs)). Types are checked against
+TypeScript 6 and 7 in CI.
 
 ## Install
 
@@ -628,6 +635,28 @@ and `scope: "all"` audits skipped and unselected content too. Passing `true` whe
 (`{ diagnostics: true }`) is a compile error, and at run time a `TypeError` whose message names the
 import to use. Everything is exported from `partial-json-repair`, plus the async verbs from
 `partial-json-repair/async`.
+
+### What each import costs
+
+The package declares no side effects, so a bundler keeps only the modules a call reaches. Gzip bytes
+of a minified app (esbuild 0.28.2, gzip level 9, source `0680807`, from `bench/size-baseline.json`;
+`bun run size:check` measures the same apps under Vite, webpack, Rspack, Rolldown and Bun too):
+
+| The app imports and calls | gzip |
+| --- | --- |
+| `import "partial-json-repair"` and `/async`, nothing called | 47 B |
+| `tryParsers` | 1.6 KB |
+| `stringify` | 2.2 KB |
+| `findJsonSpan` or `parseMany` | 30.6 KB |
+| `parse` | 33.3 KB |
+| `parse` with `locations` / `skip` / `diagnostics` / `select` | +0.0 / +1.2 / +1.6 / +3.9 KB |
+| `createStreamParser` with `sharedView` | 32.6 KB |
+| `parseStream` | 34.5 KB |
+| `parseAsync` with `cooperative` | 35.9 KB |
+| `parseAsync` and `parseManyAsync` with `worker` | 57.9 KB |
+
+Each feature's cost appears only in apps that import it: a stream app carries no whole-input path,
+and a `parse` app no streaming code.
 
 ## What you get back
 
