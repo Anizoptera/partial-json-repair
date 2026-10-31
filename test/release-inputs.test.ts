@@ -78,6 +78,15 @@ it("ignores fenced release headings and refuses duplicate real sections", () => 
   expect(changelogNotes(`${fenced}\n## Unreleased\n`, "0.1.0")).toBe("Real notes");
 });
 
+// GitHub shows every line break in a release body, so wrapped prose must arrive joined.
+it("joins wrapped prose but keeps code blocks, hard breaks and list structure", () => {
+  const section =
+    "## 0.1.0 — date\n\nOne\nparagraph.\n\n- **Item** wraps\n  here.\n- Next\n\n```ts\nconst a = 1;\nconst b = 2;\n```\n\nHard\\\nbreak\n";
+  expect(changelogNotes(section, "0.1.0")).toBe(
+    "One paragraph.\n\n- **Item** wraps here.\n- Next\n\n```ts\nconst a = 1;\nconst b = 2;\n```\n\nHard\\\nbreak",
+  );
+});
+
 it("retains both historical package states and refuses narrowing or changing their identity", () => {
   const packages = PACKAGE_DIRECTORIES.map((directory, index) => ({
     directory,

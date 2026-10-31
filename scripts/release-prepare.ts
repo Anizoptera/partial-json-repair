@@ -1,8 +1,9 @@
-import { mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { archiveIntegrity, preparePackages } from "./package-artifacts";
 import { prepareHistory } from "./release-history";
 import { analyzeHistory } from "./release-analysis";
+import { releaseFooter } from "./release-footer";
 import { changelogNotes } from "./release-notes";
 import {
   RELEASE_DIRECTORY,
@@ -38,13 +39,14 @@ export async function prepareRelease(
       path.join(staging, "comparison.json"),
       `${JSON.stringify(analysis.comparisons, null, 2)}\n`,
     );
-    const rows = await Promise.all(
-      packages.map(async (item) => {
-        const size = (await stat(item.file)).size;
-        return `| [${item.name}](https://www.npmjs.com/package/${item.name}/v/${version}) | ${(size / 1024).toFixed(1)} KB |`;
-      }),
+    const footer = await releaseFooter(
+      packages,
+      comparisons.find((item) => item.role === "immediate"),
+      staging,
+      version,
+      RELEASE_REPOSITORY,
     );
-    const notes = `${analysis.notes}\n\n### Packages\n\n| Package | Compressed size |\n| --- | --- |\n${rows.join("\n")}\n\n[Source](https://github.com/${RELEASE_REPOSITORY}/tree/${commit})\n`;
+    const notes = `${analysis.notes}\n\n${footer}\n`;
     await writeFile(path.join(staging, "notes.md"), notes);
     const inputs: ReleaseInputs = {
       tag,

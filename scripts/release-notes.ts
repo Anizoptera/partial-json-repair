@@ -9,7 +9,42 @@ interface TextNode {
 const text = (node: TextNode): string => node.value ?? node.children?.map(text).join("") ?? "";
 
 export function changelogNotes(changelog: string, version: string): string {
-  return releaseNotes(changelog, version).trim();
+  return unwrapParagraphs(releaseNotes(changelog, version).trim());
+}
+
+interface PositionedNode extends TextNode {
+  position?: { start: { offset?: number }; end: { offset?: number } };
+  children?: readonly PositionedNode[];
+}
+
+/**
+ * Joins the line breaks the changelog wraps its paragraphs and list items at. GitHub renders every
+ * line break in a release body as a visible break, so wrapped notes would show ragged lines. Code
+ * blocks and explicit hard breaks keep theirs.
+ */
+function unwrapParagraphs(markdown: string): string {
+  const ranges: [number, number][] = [];
+  const walk = (node: PositionedNode): void => {
+    if (node.type === "paragraph") {
+      const { start, end } = node.position ?? { start: {}, end: {} };
+      if (
+        start.offset !== undefined &&
+        end.offset !== undefined &&
+        node.children?.some((child) => child.type === "break") !== true
+      )
+        ranges.push([start.offset, end.offset]);
+      return;
+    }
+    if (node.type !== "code") for (const child of node.children ?? []) walk(child);
+  };
+  walk(fromMarkdown(markdown) as PositionedNode);
+  let out = markdown;
+  for (const [start, end] of ranges.toReversed())
+    out =
+      out.slice(0, start) +
+      out.slice(start, end).replaceAll(/\n[ \t]*(?:>[ \t]*)*/gu, " ") +
+      out.slice(end);
+  return out;
 }
 
 /** Select a real top-level release section and preserve its body bytes, including fences. */
