@@ -34,10 +34,11 @@ fixed and where the reply was cut.
 - **The same value however it arrives.** Text or bytes, one chunk or any split, synchronous or
   async: you get what parsing the whole text at once gives.
 - **Never throws for bad input.** Every failure is a typed value carrying whatever was recovered.
-- **Keeps your thread responsive and stops when told.** `partial-json-repair/async` runs a call in
-  slices on the same thread or in a worker, and an `AbortSignal` stops it with what was read so far.
+- **Async calls keep the thread free and can be cancelled.** `partial-json-repair/async` yields to
+  the event loop between slices or runs in a worker; an `AbortSignal` stops it and returns what was
+  read so far.
 - **Bounded on untrusted input.** Depth, buffered text and retained values each have a `max*` limit
-  that ends in a typed `limit-reached` failure, never a stack overflow, and reports are capped too.
+  that ends in a typed `limit-reached` failure, never a stack overflow; `maxEntries` caps a report.
   `__proto__` and the other dangerous keys are stored as data, dropped or refused, never assigned.
 
 Zero runtime dependencies. One ESM build runs in browsers, Node, Bun, Deno and edge runtimes: the
@@ -638,9 +639,10 @@ import to use. Everything is exported from `partial-json-repair`, plus the async
 
 ### What each import costs
 
-The package declares no side effects, so a bundler keeps only the modules a call reaches. Gzip bytes
-of a minified app (esbuild 0.28.2, gzip level 9, source `0680807`, from `bench/size-baseline.json`;
-`bun run size:check` measures the same apps under Vite, webpack, Rspack, Rolldown and Bun too):
+The package declares no side effects, so a bundler keeps only the modules your calls reach. A stream
+app ships no whole-input code; a `parse` app ships no stream code. Minified app size, gzip level 9,
+esbuild 0.28.2, source `0680807` (`bun run size:check` also builds them with Vite, webpack, Rspack,
+Rolldown and Bun):
 
 | The app imports and calls | gzip |
 | --- | --- |
@@ -649,14 +651,11 @@ of a minified app (esbuild 0.28.2, gzip level 9, source `0680807`, from `bench/s
 | `stringify` | 2.2 KB |
 | `findJsonSpan` or `parseMany` | 30.6 KB |
 | `parse` | 33.3 KB |
-| `parse` with `locations` / `skip` / `diagnostics` / `select` | +0.0 / +1.2 / +1.6 / +3.9 KB |
+| `parse` with `locations` / `skip` / `diagnostics` / `select` | +0.01 / +1.2 / +1.6 / +3.9 KB |
 | `createStreamParser` with `sharedView` | 32.6 KB |
 | `parseStream` | 34.5 KB |
 | `parseAsync` with `cooperative` | 35.9 KB |
 | `parseAsync` and `parseManyAsync` with `worker` | 57.9 KB |
-
-Each feature's cost appears only in apps that import it: a stream app carries no whole-input path,
-and a `parse` app no streaming code.
 
 ## What you get back
 

@@ -838,9 +838,8 @@ export class ScalarReader {
         if (retain) out += decoded;
         this.cursor.pos++;
       }
-      // Every escape moves the bank point with its flags, an invalid `\u` included: text banked past
-      // it carries `chunkBadEscape`, and a stale `false` dropped the `invalid-escape` repair of a
-      // string that was read across chunks.
+      // Every escape, valid or not, moves the bank point and its flags. Text banked past it takes
+      // `chunkBadEscape`; if that flag lags, a string read across chunks loses its `invalid-escape`.
       chunk = this.cursor.pos;
       chunkBadEscape = badEscape;
       bankAt = chunk;
