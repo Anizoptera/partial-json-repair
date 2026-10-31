@@ -200,6 +200,10 @@ Build before standalone `typecheck` or artifact checks; benchmark types and pack
   a partial staging of it. Finish a file's change before committing it; to land two changes in one
   file separately, commit after the first. Check `git show --stat HEAD` lists exactly those files.
   Stage each new file by its literal path first; `--only` cannot commit an untracked path.
+- **A commit that changes what a package user gets adds its `CHANGELOG.md` line under
+  `## Unreleased` in the same commit.** That is anything shipped that a caller can notice:
+  behaviour, speed, bundle size, types, exports, or the README and CONSUMER-AGENTS text. Release
+  notes are copied from this section, so a change left out of it ships unannounced. Internal refactors, tests, gates and the ROADMAP need no line.
 - Add lanes in `scripts/check.ts`; `scripts/AGENTS.md` owns dependencies and step contracts.
 - Both test runners, corpus conformance, artifacts, and steering are gated by their owning checks.
   Rust is outside the gate: run `bun run rust:check` by hand when `rust/` changes. Read the
@@ -288,7 +292,8 @@ Docs that never auto-load, so go and read them when the topic comes up:
 
 - `HLD.md` and `docs/API.md` — see Authority above.
 - `docs/MIGRATION.md` — legacy capability mappings and unresolved differences; read before parity claims.
-- `CHANGELOG.md` records released changes; `docs/DESIGN-REVIEW.md` holds settled API reasoning.
+- `CHANGELOG.md` holds the release notes (see Gates for when to add a line); `docs/DESIGN-REVIEW.md`
+  holds settled API reasoning.
 - `docs/PRIOR-ART.md` — measured comparison against rival libraries, and what this package owes
   json24. READ IT before answering "why not just use X" or touching attribution.
 - `SECURITY.md` — draft resource bounds of the `max*` options.

@@ -66,9 +66,11 @@ the version, tagging, pushing, publishing to npm and finalizing a release each n
 maintainer permission.
 
 1. For an authorized version change, set `<version>` in `package.json` (the
-   `@anizoptera/recover-json` alias is generated from it at pack time), rename `## Unreleased` in `CHANGELOG.md` to `## <version> — <YYYY-MM-DD>`, and commit.
+   `@anizoptera/recover-json` alias is generated from it at pack time), move the notes under `## Unreleased` in `CHANGELOG.md` into a new `## <version> — <YYYY-MM-DD>` section below it, keep the `## Unreleased` heading empty for the next change, and commit.
 2. Build, run `bun run api:update` for intentional public API changes and review its declaration
-   diff. `bun scripts/release.ts check v<version>` must pass. The first release has no published
+   diff. `bun scripts/release.ts check v<version>` must pass. Every commit in
+   `git log --oneline v<previous>..HEAD -- src package.json README.md CONSUMER-AGENTS.md` that a
+   package user can notice needs a line in the version's notes. The first release has no published
    predecessor to compare against; later releases must be checked against theirs, including
    intentional breaking 0.x changes.
 3. Prove the HLD runtime matrix, which CI does not run: update the runtime pins in

@@ -3,6 +3,8 @@
 Notable user-visible changes, newest first.
 Revise unpublished sections when behaviour changes; keep released notes unchanged and write later changes under Unreleased.
 
+## Unreleased
+
 ## 0.1.1 — 2026-10-31
 
 Faster parsing; values, reports and the API are unchanged.
@@ -16,6 +18,7 @@ Faster parsing; values, reports and the API are unchanged.
   `createStreamParser` hand each container that closed undamaged to `JSON.parse` instead of reading
   it character by character (Bun 1.4.4, 4096-character chunks). Streams with `diagnostics`,
   `select` or `sharedView` still read every character. Stream bundles grow by about 0.9 KB gzip.
+- The README lists the gzip bytes each import adds to a bundle.
 
 ## 0.1.0 — 2026-10-30
 
