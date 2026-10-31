@@ -808,53 +808,39 @@ export class ScalarReader {
           if (retain) out += String.fromCharCode(code);
           outLast = code;
           this.cursor.pos += 1 + digits;
-          chunk = this.cursor.pos;
-          chunkBadEscape = badEscape;
-          bankAt = chunk;
-          bankText = out;
-          bankLast = outLast;
-          bankDirty = dirty;
-          bankBadEscape = badEscape;
-          continue;
+        } else {
+          if (room < 2) {
+            this.cursor.pos = chunk - 1;
+            chunk = this.cursor.pos;
+            limited = true;
+            break;
+          }
+          dirty = true;
+          badEscape = true;
+          if (retain) out += "\\u";
+          outLast = LOWER_U;
+          this.cursor.pos++;
         }
-        if (room < 2) {
-          this.cursor.pos = chunk - 1;
-          chunk = this.cursor.pos;
-          limited = true;
-          break;
+      } else {
+        const known = e < 128 && ESCAPE[e] !== 0;
+        const isQuote = e === QUOTE || e === APOSTROPHE;
+        if (!known) {
+          dirty = true;
+          if (!isQuote) badEscape = true;
         }
-        dirty = true;
-        badEscape = true;
-        if (retain) out += "\\u";
-        outLast = LOWER_U;
+        // Every spelling ends in the escape's own character, except a known one, which decodes to it.
+        const decoded = known
+          ? readKnownEscapes(this.cursor, ESCAPE[e] ?? 0, room, retain)
+          : isQuote
+            ? this.cursor.text.charAt(this.cursor.pos)
+            : `\\${this.cursor.text.charAt(this.cursor.pos)}`;
+        outLast = decoded.charCodeAt(decoded.length - 1);
+        if (retain) out += decoded;
         this.cursor.pos++;
-        chunk = this.cursor.pos;
-        // Every escape moves the bank point with its flags, this one included: text banked past it
-        // carries `chunkBadEscape`, and a stale `false` dropped the `invalid-escape` repair of a
-        // string that was read across chunks.
-        chunkBadEscape = badEscape;
-        bankAt = chunk;
-        bankText = out;
-        bankLast = outLast;
-        bankDirty = dirty;
-        bankBadEscape = badEscape;
-        continue;
       }
-      const known = e < 128 && ESCAPE[e] !== 0;
-      const isQuote = e === QUOTE || e === APOSTROPHE;
-      if (!known) {
-        dirty = true;
-        if (!isQuote) badEscape = true;
-      }
-      // Every spelling ends in the escape's own character, except a known one, which decodes to it.
-      const decoded = known
-        ? readKnownEscapes(this.cursor, ESCAPE[e] ?? 0, room, retain)
-        : isQuote
-          ? this.cursor.text.charAt(this.cursor.pos)
-          : `\\${this.cursor.text.charAt(this.cursor.pos)}`;
-      outLast = decoded.charCodeAt(decoded.length - 1);
-      if (retain) out += decoded;
-      this.cursor.pos++;
+      // Every escape moves the bank point with its flags, an invalid `\u` included: text banked past
+      // it carries `chunkBadEscape`, and a stale `false` dropped the `invalid-escape` repair of a
+      // string that was read across chunks.
       chunk = this.cursor.pos;
       chunkBadEscape = badEscape;
       bankAt = chunk;
