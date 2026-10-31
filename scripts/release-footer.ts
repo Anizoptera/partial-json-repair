@@ -35,12 +35,15 @@ async function contents(file: string): Promise<string> {
   const size = (parts: Uint8Array[]) =>
     parts.length > 0 ? Bun.gzipSync(Buffer.concat(parts)).length : 0;
   const parts = [
-    `${kb(size(roles.js))} JS`,
-    `${kb(size(roles.maps))} source maps`,
-    `${kb(size(roles.types))} types`,
-    ...(roles.sources.length > 0 ? [`${kb(size(roles.sources))} TS sources`] : []),
-  ];
-  return parts.join(", ");
+    [roles.js, "JS"],
+    [roles.maps, "source maps"],
+    [roles.types, "types"],
+    [roles.sources, "TS sources"],
+  ] as const;
+  // The alias holds a re-export and documents; empty roles would only add noise.
+  return parts
+    .flatMap(([role, label]) => (role.length > 0 ? [`${kb(size(role))} ${label}`] : []))
+    .join(", ");
 }
 
 /**
